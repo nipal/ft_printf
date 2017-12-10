@@ -1,0 +1,19 @@
+- system de buffer : push, print
+- parsing de la chaine formater
+	- conter le nombre d'ellement
+	- les recuperer
+	- definir les truc avant apres en fonction
+	- associer: type, value, modifieur
+	- generer la chiane a afficher
+- recuperation des entrer.
+	- boucle de truc
+
+
+largeur de champ
+precision
+modificateur de longeur (cast)
+indicateur de conversion, (fonction d'impression)
+
+........... On a plein de truc a gere
+
+taille minimum g/d	rempillsage: [ ] [0]

@@ -1,0 +1,7 @@
+*.o
+*.a
+*.out
+*.swn
+*.swo
+*.swp
+ft_printf
