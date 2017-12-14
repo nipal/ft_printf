@@ -6,13 +6,80 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 07:44:34 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/10 09:35:36 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/14 15:02:17 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
+
+/*
+	to parse:::::: {0123456789hlLqjzt+-. *$#}
+
+	solo:	-->[+- 0Lqjztl] 		(and not in number)
+	combo:	-->[ .nb | nb. | nb$ | *nb$ | hh | h]	:: nb -->number [1-9][0-9]*
+
+//	##cast#	[hlqjzt]
+//	|size:|
+//	|-----|
+//	|hh	 1|
+//	|h	 2|		
+//	|	 4|
+//	|l	 8|
+//	|ll	 8|
+//	|q	 8|
+//	|j	 8|
+//	|z	 8|
+//	|t	 8|
+//
+[+- 0L lqjkt] 	one shot ->0 when it-is first of number
+
+[h|.|1-9|*|#]		combo_init
+[h|0|0-9|$|type]		combo_end
+
+
+TODO:	tester les limite des combo
+Il a certain enchainement qui permettent des espace: 
+		#->type,
+ 		*->[1-9],
+		[[0-1]-9]->$
+
+
+'' ==> tout autre symbole que les proposition
+
+*		->	['', 1-9]
+h		-> 	['', h]
+.		->	['', [1-9]]
+[1-9]	->	['' ,'$', '[0-9]', '.']
+[0-9]	->	['' ,'$', '[0-9]', '.']
+0		->	['', [1-9]]
+#		->	[type]
+
+:	*
+:	*[1-9][0-9]...$
+:	* [1-9][0-9]... $
+:	h
+:	hh
+:	[1-9][0-9]...
+:	[1-9][0-9]...'.'
+:	'.'[1-9][0-9]...
+:	'.'
+:	0[1-9][0-9]...
+:	#[type]
+
+//	Quand on commence un combo, on ouvre un senario. Il faut le respecter si non
+//	voild ce qui va se passer >
+
+
+
+
+
+priority:
+[h-l size_mode] 	--> the bigger
+other:				--> the laste value
+*/
+
 
 
 void	truc()
@@ -926,72 +993,5 @@ int	main(int ac, char **av)
 //	size_arg_char_priority_test();
 	return (0);
 }
-
-/*
-	to parse:::::: {0123456789hlLqjzt+-. *$#}
-
-	solo:	-->[+- 0Lqjztl] 		(and not in number)
-	combo:	-->[ .nb | nb. | nb$ | *nb$ | hh | h]	:: nb -->number [1-9][0-9]*
-
-//	##cast#	[hlqjzt]
-//	|size:|
-//	|-----|
-//	|hh	 1|
-//	|h	 2|		
-//	|	 4|
-//	|l	 8|
-//	|ll	 8|
-//	|q	 8|
-//	|j	 8|
-//	|z	 8|
-//	|t	 8|
-//
-[+- 0L lqjkt] 	one shot ->0 when it-is first of number
-
-[h|.|1-9|*|#]		combo_init
-[h|0|0-9|$|type]		combo_end
-
-
-TODO:	tester les limite des combo
-Il a certain enchainement qui permettent des espace: 
-		#->type,
- 		*->[1-9],
-		[[0-1]-9]->$
-
-
-'' ==> tout autre symbole que les proposition
-
-*		->	['', 1-9]
-h		-> 	['', h]
-.		->	['', [1-9]]
-[1-9]	->	['' ,'$', '[0-9]', '.']
-[0-9]	->	['' ,'$', '[0-9]', '.']
-0		->	['', [1-9]]
-#		->	[type]
-
-:	*
-:	*[1-9][0-9]...$
-:	* [1-9][0-9]... $
-:	h
-:	hh
-:	[1-9][0-9]...
-:	[1-9][0-9]...'.'
-:	'.'[1-9][0-9]...
-:	'.'
-:	0[1-9][0-9]...
-:	#[type]
-
-//	Quand on commence un combo, on ouvre un senario. Il faut le respecter si non
-//	voild ce qui va se passer >
-
-
-
-
-
-priority:
-[h-l size_mode] 	--> the bigger
-other:				--> the laste value
-*/
-
 
 

@@ -5,6 +5,10 @@
 #define BISTRO_LEN 20
 #define BISTRO_UNITE 1000000
 
+#define BISTRO_DEBUG 1
+#define F_TO_INT *(int*)&
+#define INT_TO_F *(float*)&
+
 typedef struct	s_bistro
 {
 	int		sign;
@@ -156,19 +160,116 @@ void	bistro_print(t_bistro *nb)
 
 void	bistro_print_str(t_bistro *nb, char *str)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = BISTRO_LEN - 1;
 	printf("%s", str);
 	while (i >= 0)
 	{
-		printf("%06ld", nb->number[i]);
+		if (BISTRO_DEBUG == 1)
+  			printf("%06ld", nb->number[i]);
+		else
+			printf("%06ld ", nb->number[i]);
 		i--;
 	}
 	printf("\n");
 }
 
+char	*bistro_to_a(t_bistro *nb)
+{
+	char	*str;
+	
+	if (!(str = (char*)malloc(sizeof(char) * (BISTRO_LEN * 6 + 1))))
+		return (NULL);
+	str[BISTRO_LEN * 6] = '\0';
+	//	on fait les baill ;)
+	return (str);
+}
 
+/////////////////// FLOAT /////////////////////////////////////////
+
+void	print_float_bit(float f, char *s)
+{
+	char	str[35];
+	int		i;
+	int		j;
+	int		data;
+
+	data = *(int*)&f;
+	str[34] = '\0';
+	j = 0;
+	i = 0;
+	while (i < 32)
+	{
+		str[j] = (data & (1 << (31 - i))) ? '1' : '0';
+		if (i == 0 || i == 8)
+		{
+			j++;
+			str[j] = '|';
+		}
+		i++;
+		j++;
+	}
+	printf("%s:[%200.150f]:	[%s]\n", s, f, str);
+}
+
+float	float_add_mantis(float val, int add)
+{
+	int	value;
+
+	value = F_TO_INT val;
+	value += add;
+	return (INT_TO_F value);
+}
+
+float	float_construct(int sign, int a, int b)
+{
+	int	val;
+
+	val = (!!(sign) << 31) | ((a & ((1 << 8) - 1)) << 23) | (b & ((1 << 23) - 1));
+	return (INT_TO_F val);
+}
+
+void	float_get_value(float f, int *sign, int *expo, int *mantis)
+{
+	*sign = !!((F_TO_INT f) & 1 << 31);	// 0-> '+'	1-> '-'
+	*expo = ((F_TO_INT f) >> 23 & 0xFF) - 127;
+	*mantis = (F_TO_INT f) & ((1 << 23) - 1);
+}
+
+void	float_print_info(float f)
+{
+	int	sign;
+	int	expo;
+	int	mantis;
+
+	float_get_value(f, &sign, &expo, &mantis);
+	print_float_bit(f, "");
+	printf("%202c	[%c|%8d|%23d]\n", ' ', ((sign) ? '-' : '+'), expo, mantis);
+//	printf();
+}
+
+void	print_float(float f)
+{
+	t_bistro	bmantis;
+	t_bistro	bexpo;
+	t_bistro	sum;
+	int	sign;
+	int	expo;
+	int	mantis;
+
+	float_get_value(f, &sign, &expo, &mantis);
+	((expo - 23) > 0) ? bistro_pow_in(2, expo, &bmantis) : bistro_pow_in(2, expo, &bmantis) ;
+}
+//////////////// 	 TEST FLOAT	    //////////////////////////////////////////
+
+void	test_float()
+{
+	float_print_info(1);
+}
+
+//////////////// TEST BISTROMATIQUE //////////////////////////////////////////
 
 void	test_bitro_print()
 {
@@ -313,24 +414,35 @@ void	debug_mult_one()
 	bistro_print_str(&c, "b * 532654			");
 }
 
+void	test_bistro_pow()
+{
+	t_bistro	nb;
 
+	bistro_pow_in(5, 97, &nb);
+	bistro_print_str(&nb, "5 ^ 97:	");
+}
 
 void	test_bistromatique()
 {
 //	test print
 //	test_bitro_print();
-	test_bistro_all();
+//	test_bistro_all();
 //	debug_mult_one();
-//	test add
-//	test mult one
-//	test mult
+//	test_bistro_pow();
 
 //	test power		+ make power
 //	test coma_print	+ make coma_print
+	
+}
+
+void	test_the_float()
+{
+	test_float();
 }
 
 int		main()
 {
-	test_bistromatique();
+//	test_bistromatique();
+	test_the_float();
 	return (0);
 }
