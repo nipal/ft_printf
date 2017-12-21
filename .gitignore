@@ -6,3 +6,4 @@
 *.swp
 ft_printf
 *untraked*
+*.vim
