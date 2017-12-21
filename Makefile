@@ -6,31 +6,65 @@
 #    By: nperrin <nperrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/05 01:28:32 by fjanoty           #+#    #+#              #
-#    Updated: 2017/12/09 16:14:03 by fjanoty          ###   ########.fr        #
+#    Updated: 2017/12/21 09:33:19 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: clean all fclean re gdb
 
-export CFLAGS	= -g  -Wall -Wextra -Werror -O2
+LIB1		=  ./libft
 
-export CC	= gcc
+SRC_PATH 	= src
+SRC_NAME 	= 						\
+				main_test.c			\
+				bistromatique.c		\
+				integer.c			\
+				print.c				\
+				print_bit.c			\
+				floating_number.c	\
 
 
-SRC_DIR			= ./src
-LIB_FT			= ./libft
 
-all:
-	make -C $(LIB_FT)
-	make -C $(SRC_DIR)
+OBJ_PATH	= 	obj
+CPPFLAGS 	= 	-I inc -I $(LIB1)
+LDLIBS 		= 	-lft
+LDFLAGS 	= 	-L $(LIB1) $(LDLIBS)
+NAME 		= 	ft_printf
+CC			= 	gcc
+
+CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		+= 	-g3 -fsanitize=address
+#CFLAGS		+=	-02
+OBJ_NAME 	= 	$(SRC_NAME:.c=.o)
+
+SRC 		= 	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
+#OBJ 		= 	$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
+OBJ			= 	$(SRC:.c=.o)
 	
+all: $(NAME)
+
+LIB1:
+	make -C $(LIB1)
+
+$(NAME): $(OBJ)
+	    $(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME)
+
+
+$(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	    @mkdir -p $(OBJ_PATH)
+		$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
 
 clean:
-	make -C $(LIB_FT)  		clean
-	make -C $(SRC_DIR) 		clean
+	rm -rf $(OBJ)
+	rm  -rf $(OBJ_PATH)
+	make -C $(LIB1) clean
 
 fclean: clean
-	make -C $(LIB_FT)		fclean
-	make -C $(SRC_DIR)		fclean
 
 re: fclean all
+	make -C $(LIB1) re
+
+norme:
+	norminette $(SRC)
+	norminette $(INC_PATH)*.h
+
