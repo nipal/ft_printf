@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 08:46:44 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 11:11:15 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,6 @@ int		buffer(char *str, int size, int fd);	// si str est NULL on imprime le buffe
 void	print_float(float f, int precision);
 void	float_get_value(float f, int *sign, int *expo, int *mantis);
 int		calcul_bistro2(int expo, int mantis, t_bistro *res, int precision);
-void	calcul_bistro(int expo, int mantis, t_bistro *res, int precision);
+int		calcul_bistro(int expo, int mantis, t_bistro *res, int precision);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:54 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 08:42:32 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 10:34:49 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 #define BISTRO_UNITE 1000000
 #define BISTRO_NB_DIGIT 6
 
-#define BISTRO_DEBUG 1
+#define BISTRO_DEBUG 0
 
 //  integer
 # define SYM_ASK 0

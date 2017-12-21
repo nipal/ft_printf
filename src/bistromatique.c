@@ -6,12 +6,11 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 08:41:23 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 14:18:31 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bistromatique.h"
-
 void	bistro_set_0_in(t_bistro *nb)
 {
 	bzero(nb, sizeof(t_bistro));
@@ -193,6 +192,8 @@ void	bistro_define_len(t_bistro *nb, int *nb_block, int *nb_digit)
 	else
 		while (pow_10 < BISTRO_UNITE && nb->number[i] >= pow_10 && (pow_10 *= 10))
 			(*nb_digit)++;
+	if (!*nb_digit)
+		*nb_digit = 1;
 }
 
 //	on pourrai aussi faire un truc comme pour les int
@@ -208,6 +209,9 @@ int		bistro_to_str(t_bistro *nb, char *buff, int len_buff)
 	bistro_define_len(nb, &nb_block, &nb_digit);
 	i = 0;
 	j = len_buff - BISTRO_NB_DIGIT - 1;
+//	if (nb->number[3] == 1000)
+//		nb->number[3] = 1234;
+//	bistro_print_str(nb, "number:	");
 	while (i < nb_block - 1)
 	{
 		put_integer_s(nb->number[i] + BISTRO_UNITE, 10, buff + j - 1, 7); // il fut mettre combien??
@@ -236,12 +240,20 @@ long	power(long val, int pow)
 int		bistro_get_digit(t_bistro *nb, int pow, int base)
 {
 	int				id_nb;
+	int				id_div;
 	int				div;
 	int				digit;
 
 	id_nb = pow / BISTRO_NB_DIGIT;
-	div = power(base, pow % BISTRO_NB_DIGIT);
+	id_div = pow % BISTRO_NB_DIGIT;
+	div = power(base, id_div);
 	digit = (nb->number[id_nb] / div) % base;
+//	printf("**********************************************\n");
+//	printf("pow:%d	base:%d\n", pow, base);
+//	printf("id_nb:%d	id_div:%d	div:%d\n", id_nb, id_div, div);
+//	bistro_print_str(nb, "number:	");
+//	printf("**********************************************\n");
+	
 	return (digit);
 }
 
