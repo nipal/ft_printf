@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 07:44:34 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/14 15:02:17 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/16 15:57:54 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -498,7 +498,7 @@ void	print_float_bit(float f, char *s)
 		i++;
 		j++;
 	}
-	printf("%s:[%200.150a]:	%s\n", s, f, str);
+	printf("%s:[%200.150f]:	%s\n", s, f, str);
 }
 
 void	mutiple_float_value()
@@ -957,6 +957,24 @@ void	size_arg_char_priority_test()
 
 }
 
+void	test_precision_float()
+{
+	float	a = 0.99999;
+
+	print_float_bit(a, "");
+
+	printf("%%f		|a:%f\n", a);
+	printf("%%f.		|a:%.f\n", a);
+	printf("%%f.0		|a:%.0f\n", a);
+	printf("%%f.1		|a:%.1f\n", a);
+	printf("%%f.2		|a:%.2f\n", a);
+	printf("%%f.3		|a:%.3f\n", a);
+	printf("%%f.4		|a:%.4f\n", a);
+	printf("%%f.5		|a:%.5f\n", a);
+	printf("%%f.6		|a:%.6f\n", a);
+	printf("%%f.7		|a:%.7f\n", a);
+}
+
 int	main(int ac, char **av)
 {
 //	test_with_ret();
@@ -970,7 +988,7 @@ int	main(int ac, char **av)
 //	mantis_size_test();
 //	mutiple_float_value();
 //	float_structure_test();
-	float_expo_all_mantis_0();
+//	float_expo_all_mantis_0();
 //	float_precision_test();
 //	valid_format();
 //printf("========== %s ==========\n", __func__);//===<<<>>
@@ -991,6 +1009,9 @@ int	main(int ac, char **av)
 	
 //	space_egal();		//	anly the regular space are ignored || the \[vtrn] reproduce the space and broke the chaine
 //	size_arg_char_priority_test();
+
+	
+	test_precision_float();
 	return (0);
 }
 

@@ -6,16 +6,31 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/10 08:59:08 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 08:46:44 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_PRINTF_H
 # define FT_PRINTF_H
 
-# include <libft.h>
+# include <string.h>
 # include <stdio.h>	// oui pour l'instatn on a besoin de debug encore:
 # include <stdarg.h>
+# include "libft.h"
+# include "bistromatique.h"
+
+/////  integer //////////
+# define SYM_ASK 0
+# define SYM_MIN 1
+# define SYM_MAJ 2
+/////////////////////////
+
+
+//	converter
+#define F_TO_INT *(int*)&
+#define INT_TO_F *(float*)&
+
+
 
 typedef	struct	s_print_param
 {
@@ -63,20 +78,20 @@ que se passe-t-il si il y a plusieurs information contradictoire
 */
 
 /*			Parsing	>>>		*/
-void	all_func(char *qual, int *id, t_format_mem *mem);
-		is_integer				// >>> with type
-		is_left_justified		// >>> ?
-		is_sign					// >>> ?
-		get_precision			// la precision peut etre une ref_data
-		get_min_size			// >>> ?
-		get_empi_char			// >>> ?
-		get_base				// >>> with type
-		get_value				// >>> ? si la zone memoir est une ref_data
-	
-		// exostiviter des senario
-		is_one_shot				// les modifieur facile
-		is_first_combo
-		is_combo_valid			// celuila, plus chiant
+//////		void	all_func(char *qual, int *id, t_format_mem *mem);
+//////				is_integer				// >>> with type
+//////				is_left_justified		// >>> ?
+//////				is_sign					// >>> ?
+//////				get_precision			// la precision peut etre une ref_data
+//////				get_min_size			// >>> ?
+//////				get_empi_char			// >>> ?
+//////				get_base				// >>> with type
+//////				get_value				// >>> ? si la zone memoir est une ref_data
+//////			
+//////				// exostiviter des senario
+//////				is_one_shot				// les modifieur facile
+//////				is_first_combo
+//////				is_combo_valid			// celuila, plus chiant
 
 /*		<<<	gnisraP			*/
 
@@ -111,5 +126,35 @@ typedef	struct	s_rules
 int	ft_printf(char *format, ...);
 
 void	count_arg(char *format, t_format_mem *mem);
+
+/*
+**	integer.c
+*/
+
+char	**symbole_base1(int flag);
+int		put_integer_s(long val, int base, char *buff, int buff_len);
+int		put_integer_u(unsigned long val, int base, char *buff, int buff_len);
+
+
+/*
+**	print_bit.c
+*/
+
+void	print_bit(unsigned char *data, int size);
+void	print_bit_str(unsigned char *data, int size, char *s);
+
+/*
+**	print.c
+*/
+int		buffer(char *str, int size, int fd);	// si str est NULL on imprime le buffer et on libere la memoire
+
+/*
+**	floating_number.c
+*/
+
+void	print_float(float f, int precision);
+void	float_get_value(float f, int *sign, int *expo, int *mantis);
+int		calcul_bistro2(int expo, int mantis, t_bistro *res, int precision);
+void	calcul_bistro(int expo, int mantis, t_bistro *res, int precision);
 
 #endif
