@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 05:43:49 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 14:20:30 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 16:03:02 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ int		calcul_bistro2(int expo, int mantis, t_bistro *res, int precision)
 	int			id_coma;
 int	digit;
 
-printf("\n\n\n");
+//printf("\n\n\n");
 
 	digit = 0;
 	expo -= 23;
@@ -93,7 +93,7 @@ printf("\n\n\n");
 //	printf("id_coma:%d	precision:%d\n", id_coma, precision);
 //	bistro_print_str(res, "bmantis");
 	if ((precision > 0) && (precision < id_coma)
-		&& ((digit = bistro_get_digit(res, id_coma - precision, 10)) >= 5))
+		&& ((digit = bistro_get_digit(res, id_coma - precision - 1, 10)) >= 5))
 	{
 		bistro_set_digit_in(1, id_coma - precision, 10 , &add);
 		bistro_add_in(res, &add, res);
@@ -118,7 +118,7 @@ void	float_get_value(float f, int *sign, int *expo, int *mantis)
 //	apres on integrera cette fonction dans un truc qui construit la chaine de caractere a push
 void	print_float(float f, int precision)
 {
-	char		buff[BUFF_SIZE + 10];
+	char		buff[BUFF_SIZE];
 	t_bistro	sum;
 	int			sign;
 	int			expo;
@@ -130,7 +130,7 @@ void	print_float(float f, int precision)
 	int			nb_move;
 
 	buff[BUFF_SIZE - 1] = '\0';
-	memset(buff, '0', BUFF_SIZE - 1 + 10);
+	memset(buff, '0', BUFF_SIZE - 1);
 	float_get_value(f, &sign, &expo, &mantis);
 	id_coma = calcul_bistro2(expo, mantis, &sum, precision);			// elle pourrais aussi directement appeler 
 	nb_digit = bistro_to_str(&sum, buff, BUFF_SIZE);
@@ -157,6 +157,16 @@ void	print_float(float f, int precision)
 	}
 	if (precision > 0 && precision < id_coma)	// racourcir la chaine de charactere en fonction de la precision
 	{
+//printf("move precision\n");
+		id_from = BUFF_SIZE - 1 - nb_digit;
+		nb_move	= id_from + id_coma - precision;
+		nb_move = BUFF_SIZE - nb_move;
+		id_to	= BUFF_SIZE - 2 - nb_move;
+//		printf("buff + id_from:[%s]\n", buff + id_from);
+//		printf("id_from:%d	id_to:%d	nb_move:%d	(id_to + nb_move):%d	size_buff:%d\n", id_from, id_to, nb_move, (id_to + nb_move), BUFF_SIZE);
+		memmove(buff + id_to, buff + id_from, nb_move);
+		nb_digit -= id_to - id_from;
+
 //		// 	nb < 1
 //		// 		from 	= id_coma
 //		// 		nb_move	= id_coma - precision
@@ -186,7 +196,8 @@ void	print_float(float f, int precision)
 //		nb_digit -= nb_move;
 	}
 	// On imprime
-	printf("{%15.3f}	[%s]\n", f, (buff + BUFF_SIZE - 1 - nb_digit));
+	buff[510] = '\0';
+	printf("[%10.40f]		{%15.5f}	[%s]\n", f, f, (buff + BUFF_SIZE - 1 - nb_digit));
 }
 
 /*

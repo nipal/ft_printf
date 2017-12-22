@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:10:43 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 13:42:41 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 16:02:20 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	test_print_float()
 
 void	test_print_float_precision()
 {
-	float	precision = 3;
+	float	precision = 5;
 
-	print_float(0.123456789000, precision);
+	print_float(0.1234567890123456, precision);
 	print_float(0.11111, precision);
 	print_float(0.22222, precision);
 	print_float(0.33333, precision);

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 07:44:34 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/16 15:57:54 by fjanoty          ###   ########.fr       */
+/*   Updated: 2017/12/21 17:58:39 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -975,6 +975,20 @@ void	test_precision_float()
 	printf("%%f.7		|a:%.7f\n", a);
 }
 
+#include <locale.h>
+void	pritf_separator_test()
+{
+	setlocale(LC_NUMERIC, "");
+	printf("%'d\n", 1222333444);
+}
+
+void	test_valid_flag()
+{
+	int	a;
+
+	printf("%P\n", &a);
+}
+
 int	main(int ac, char **av)
 {
 //	test_with_ret();
@@ -1011,7 +1025,10 @@ int	main(int ac, char **av)
 //	size_arg_char_priority_test();
 
 	
-	test_precision_float();
+//	test_precision_float();
+	
+	pritf_separator_test();
+//	test_valid_flag();
 	return (0);
 }
 
