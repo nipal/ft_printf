@@ -50,13 +50,11 @@ void	bistro_mult_one_in(t_bistro *a, long nb, t_bistro *result)
 	int			i;
 	long		tmp;
 	long		ret;
-	long		ret_add;
 	t_bistro	tmp_nb;
 
 	i = 0;
 	ret = 0;
-	ret_add = 0;
-	ft_bzero(&tmp_nb, sizeof(tmp_nb));
+	bzero(&tmp_nb, sizeof(tmp_nb));
 	while (i < BISTRO_LEN)
 	{
 		tmp = a->number[i] * nb + ret;

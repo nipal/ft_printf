@@ -21,6 +21,7 @@ SRC_NAME 	= 						\
 				integer.c			\
 				print.c				\
 				print_bit.c			\
+				parsing.c			\
 				floating_number.c	\
 
 
@@ -57,12 +58,14 @@ $(OBJ_PATH)%.o: $(SRC_PATH)%.c
 clean:
 	rm -rf $(OBJ)
 	rm  -rf $(OBJ_PATH)
-	make -C $(LIB1) clean
+
+#	make -C $(LIB1) clean
 
 fclean: clean
 
 re: fclean all
-	make -C $(LIB1) re
+
+#	make -C $(LIB1) re
 
 norme:
 	norminette $(SRC)
