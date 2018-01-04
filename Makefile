@@ -22,6 +22,7 @@ SRC_NAME 	= 						\
 				print.c				\
 				print_bit.c			\
 				parsing.c			\
+				pars_func.c			\
 				floating_number.c	\
 
 
@@ -29,7 +30,7 @@ SRC_NAME 	= 						\
 OBJ_PATH	= 	obj
 CPPFLAGS 	= 	-I inc -I $(LIB1)
 LDLIBS 		= 	-lft
-LDFLAGS 	= 	-L $(LIB1) $(LDLIBS)
+LDFLAGS 	= 	-L $(LIB1)  $(LDLIBS)
 NAME 		= 	ft_printf
 CC			= 	gcc
 
