@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/05 21:49:45 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/06 06:42:25 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 05:38:18 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ char	*flag_set_size_unsigned(char **prev_hard, char *now, t_fparam *p)
 char	*flag_set_cast_s1(char **prev_hard, char *now, t_fparam *p)
 {
 	(void)prev_hard;
-	if (((p->state >> e_id_size_caste) & 0xF) < 2)
+	if (((p->state >> e_id_size_caste) & 0xF) < 1)
 	{
-		p->state = e_size_define |  (p->state & ~(0xFl << e_id_size_caste)) | 1l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define |  1l << e_id_size_caste;	
 	}
 	return (now + 1);
 }
@@ -109,7 +110,8 @@ char	*flag_set_cast_s2(char **prev_hard, char *now, t_fparam *p)
 	{
 		if (((p->state >> e_id_size_caste) & 0xF) < 2)
 		{
-			p->state = e_size_define |  (p->state & ~(0xFl << e_id_size_caste)) | 2l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+			p->state &= ~(0xFl << e_id_size_caste);
+			p->state |= e_size_define | 2l << e_id_size_caste;
 		}
 		return (now + 1);
 	}
@@ -122,7 +124,8 @@ char	*flag_set_cast_s4(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 4)
 	{
-		p->state = e_size_define |  (p->state & ~(0xFl << e_id_size_caste)) | 4l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define | 4l << e_id_size_caste;
 	}
 	return (now + 1);
 }
@@ -132,7 +135,8 @@ char	*flag_set_cast_s8(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 8)
 	{
-		p->state = e_size_define |  (p->state & ~(0xFl << e_id_size_caste)) | 8l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define | 8l << e_id_size_caste;	
 	}
 
 	if (now[1] != 'l')
@@ -147,6 +151,7 @@ char	*flag_set_cast_u1(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 2)
 	{
+		p->state &= ~(0xFl << e_id_size_caste);
 		p->state = e_size_define | e_is_unsigned | (p->state & ~(0xFl << e_id_size_caste)) | 1l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
 	}
 	return (now + 1);
@@ -157,7 +162,8 @@ char	*flag_set_cast_u2(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 2)
 	{
-		p->state = e_size_define | e_is_unsigned | (p->state & ~(0xFl << e_id_size_caste)) | 2l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define | e_is_unsigned | (2l << e_id_size_caste);	// on offset un nombre les bit d'a[res sont reserver
 	}
 	return (now + 1);
 }
@@ -167,7 +173,8 @@ char	*flag_set_cast_u4(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 4)
 	{
-		p->state = e_size_define | e_is_unsigned | (p->state & ~(0xFl << e_id_size_caste)) | 4l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define | e_is_unsigned | (4l << e_id_size_caste);	// on offset un nombre les bit d'a[res sont reserver
 	}
 	return (now + 1);
 }
@@ -177,12 +184,19 @@ char	*flag_set_cast_u8(char **prev_hard, char *now, t_fparam *p)
 	(void)prev_hard;
 	if (((p->state >> e_id_size_caste) & 0xF) < 8)
 	{
-		p->state = e_size_define | e_is_unsigned | (p->state & ~(0xFl << e_id_size_caste)) | 8l << e_id_size_caste;	// on offset un nombre les bit d'a[res sont reserver
+		p->state &= ~(0xFl << e_id_size_caste);
+		p->state |= e_size_define | e_is_unsigned | (8l << e_id_size_caste);	// on offset un nombre les bit d'a[res sont reserver
 	}
 
 	return (now + 1);
 }
 
+char	*flag_set_long_double(char **prev_hard, char *now, t_fparam *p)
+{
+	(void)prev_hard;
+	p->state |= e_cast_long_double;
+	return (now + 1);
+}
 
 //		h
 //		l

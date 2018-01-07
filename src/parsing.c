@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 14:18:31 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 05:38:15 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	init_func_table(char *(**tabf)(char **prct, char *now, t_fparam *p), int *f
 		i++;
 	}
 		tabf['\0'] = NULL; 	// print the last txt part
-		tabf['+'] = flag_add_plus;	// condition,	action
+		tabf['+'] = flag_add_plus;
 		tabf['-'] = flag_add_minus;
 		tabf[' '] = flag_add_space;
 		tabf['#'] = flag_add_hash;
@@ -59,37 +59,40 @@ void	init_func_table(char *(**tabf)(char **prct, char *now, t_fparam *p), int *f
 		tabf['0'] = flag_add_zero;
 
 //variable
-		tabf['*'] = NULL;
-		tabf['.'] = NULL;
-		tabf['$'] = NULL;
+		tabf['*'] = set_senario_star;
+		tabf['.'] = set_senario_point;
 // number
-		tabf['1'] = NULL;
-		tabf['2'] = NULL;
-		tabf['3'] = NULL;
-		tabf['4'] = NULL;
-		tabf['5'] = NULL;
-		tabf['6'] = NULL;
-		tabf['7'] = NULL;
-		tabf['8'] = NULL;
-		tabf['9'] = NULL;
+		tabf['1'] = set_senario_nbr;
+		tabf['2'] = set_senario_nbr;
+		tabf['3'] = set_senario_nbr;
+		tabf['4'] = set_senario_nbr;
+		tabf['5'] = set_senario_nbr;
+		tabf['6'] = set_senario_nbr;
+		tabf['7'] = set_senario_nbr;
+		tabf['8'] = set_senario_nbr;
+		tabf['9'] = set_senario_nbr;
 
 
 
 
 // cast
-		tabf['h'] = NULL;
-		tabf['l'] = NULL;
-		tabf['L'] = NULL;
-		tabf['z'] = NULL;
-		tabf['j'] = NULL;
-		tabf['t'] = NULL;
+		tabf['h'] = flag_set_cast_s2;
+		tabf['l'] = flag_set_cast_s8;
+		tabf['z'] = flag_set_cast_u8;
+		tabf['j'] = flag_set_cast_u8;
+		tabf['t'] = flag_set_cast_u8; 
+		tabf['L'] = flag_set_long_double;	// long double
+
 
 // typefiled
 		tabf['%'] = NULL;
 		tabf['d'] = NULL;
+		tabf['D'] = NULL;
 		tabf['i'] = NULL;
 		tabf['u'] = NULL;
+		tabf['U'] = NULL;
 		tabf['o'] = NULL;
+		tabf['O'] = NULL;
 		tabf['x'] = NULL;
 		tabf['X'] = NULL;
 		tabf['f'] = NULL;
@@ -107,8 +110,6 @@ void	init_func_table(char *(**tabf)(char **prct, char *now, t_fparam *p), int *f
 		tabf['p'] = NULL;
 		tabf['n'] = NULL;
 		tabf['m'] = NULL;
-
-
 }
 
 

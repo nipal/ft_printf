@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/06 07:35:16 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/07 03:26:08 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 04:43:28 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char	*set_senario_star(char **prev_hard, char *now, t_fparam *p)
 	int		number;
 
 	beg = ++now;
-	p->state &= ~(e_has_min_width_next_arg | e_has_min_width_arg) // efface les trace au cas ou
+	p->state &= ~(e_has_min_width_next_arg | e_has_min_width_arg);// efface les trace au cas ou
 	p->state |= e_has_min_width;
 	if (*now >= '0' && *now <= '9')
 	{
@@ -52,19 +52,14 @@ char	*set_senario_star(char **prev_hard, char *now, t_fparam *p)
 	return (beg);
 }
 
-//	is 	 nbr
-//	w
-//	is 	 *[nbr,$]   --> else PARSE_BACK
-//	else PARSE_ERROR
-
 char	*set_senario_point(char **prev_hard, char *now, t_fparam *p)
 {
 	int				number;
 	char		c;
 	char		*beg;
 
-	e->state |= e_has_precision;
-	p->state &= ~(e_has_precision_next_arg | e_has_precision_arg)
+	p->state |= e_has_precision;
+	p->state &= ~(e_has_precision_next_arg | e_has_precision_arg);
 	if ((c = *now) >= '0' && c <= '9')
 		return (get_number(now, &number));
 	else if (c == '*')
@@ -94,12 +89,12 @@ char	*set_senario_nbr(char **prev_hard, char *now, t_fparam *p)
 	beg = now;
 	if (*(now = get_number(now, &number)) == '$')
 	{
-		e->state |= e_has_value_arg;
-		e->id_width = number;
+		p->state |= e_has_value_arg;
+		p->id_width = number;
 		return (now + 1);
 	}
-	e->state |= e_has_min_width;
-	e->width = number;
+	p->state |= e_has_min_width;
+	p->width = number;
 	return (beg);
 }
 

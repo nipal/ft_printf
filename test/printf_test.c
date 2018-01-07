@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 07:44:34 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/06 03:09:32 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 05:38:19 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -996,6 +996,32 @@ void	zero_long_double()
 	print_bit_str(&a, sizeof(long double), "long double:	");
 }
 
+void	caste_type_size()
+{
+	long	v = 872364872364;	
+
+	printf("d\n");
+	printf("%%ld | %ld\n", v);
+	printf("%%jd | %jd\n", v);
+	printf("%%zd | %zd\n", v);
+	printf("%%td | %td\n", v);
+	printf("\nu\n");
+	printf("%%lu | %ld\n", v);
+	printf("%%ju | %jd\n", v);
+	printf("%%zu | %zd\n", v);
+	printf("%%tu | %td\n", v);
+	printf("\nx\n");
+	printf("%%lx | %ld\n", v);
+	printf("%%jx | %jd\n", v);
+	printf("%%zx | %zd\n", v);
+	printf("%%tx | %td\n", v);
+	printf("\ni\n");
+	printf("%%li | %ld\n", v);
+	printf("%%ji | %jd\n", v);
+	printf("%%zi | %zd\n", v);
+	printf("%%ti | %td\n", v);
+}
+
 int	main(int ac, char **av)
 {
 //	test_with_ret();
@@ -1037,8 +1063,9 @@ int	main(int ac, char **av)
 //	pritf_separator_test();
 //	test_valid_flag();
 
-	zero_long_double();
+//	zero_long_double();
 
+	caste_type_size();
 	return (0);
 }
 

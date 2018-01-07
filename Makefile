@@ -6,7 +6,7 @@
 #    By: nperrin <nperrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/05 01:28:32 by fjanoty           #+#    #+#              #
-#    Updated: 2018/01/05 21:53:25 by fjanoty          ###   ########.fr        #
+#    Updated: 2018/01/07 05:40:49 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,10 +19,12 @@ SRC_NAME 	= 						\
 				main_test.c			\
 				bistromatique.c		\
 				integer.c			\
+				type_function.c		\
 				print.c				\
 				print_bit.c			\
 				parsing.c			\
 				pars_func.c			\
+				precision_func.c	\
 				floating_number.c	\
 
 
