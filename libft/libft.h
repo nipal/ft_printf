@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/11/04 18:24:51 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/10 08:19:20 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 08:05:06 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void				ft_putendl_fd(char *s, int fd);
 void				ft_putnbr_fd(int n, int fd);
 
 
-/*
+///*
 typedef struct		s_list
 {
 	void			*content;
@@ -93,8 +93,8 @@ void				ft_lstadd(t_list **alst, t_list *new);
 void				ft_lstadd_back(t_list **alst, t_list *new);
 void				ft_lstiter(t_list *lst, void (*f)(t_list *elem));
 t_list				*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem));
-t_list				*read_line_number(int fd);
-*/
+//t_list				*read_line_number(int fd);
+//*/
 
 
 int					is_int_over_flow(char *number);

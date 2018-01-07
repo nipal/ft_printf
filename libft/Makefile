@@ -6,7 +6,7 @@
 #    By: fjanoty <fjanoty@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/09/13 19:48:58 by fjanoty           #+#    #+#              #
-#    Updated: 2017/11/03 22:50:21 by fjanoty          ###   ########.fr        #
+#    Updated: 2018/01/07 08:07:20 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -73,7 +73,14 @@ SRC		= ft_atoi.c \
 		  overflow_test.c \
 		  get_next_line.c \
 		  print_double.c	\
-		  ft_toupper.c 
+		  ft_toupper.c 		\
+		  ft_lstadd.c	\
+		  ft_lstnew.c	\
+		  ft_lstmap.c	\
+		  ft_lstiter.c	\
+		  ft_lstdelone.c	\
+		  ft_lstdel.c	\
+
 
 #CFLAGS = -Wall -Werror -g -fsanitize=address 
 

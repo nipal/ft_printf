@@ -6,38 +6,38 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/07 05:38:15 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 07:41:43 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-void	init_fparam(t_fparam *arg)
+void	init_fparam(t_fparam *arg, char *now)
 {
+	char *prct;
+	char *beg_sec;
+
+	prct = now;
+	beg_sec = arg->beg_sec;
 	bzero(arg, sizeof(t_fparam)); // on mettera eventuelement des valeur defni autre
+	arg->prct = prct;
+	arg->beg_sec = beg_sec;
 }
 
-char	*set_parse_error(char **prev_hard, char *now, t_fparam *p)
+char	*get_char_toend(char *str, char target)
 {
-	(void)prev_hard;
-	(void)now;
-	(void)p;
-	int	option = 2;
-	// on [set une erreur] OU on [re_init + jump new prct [push normal txt_format]]
-	
-	if (option == 1)
-	{
-		p->state |= e_parse_error;
-		return (now + 1);
-	}
-	else
-	{
-		init_fparam(p);
-		while (*now && *now != '%')// find new prct
-			now++;
-		return (now + ((*now) ? 1: 0));
-	}
+	while (*str && *str != target)
+		str++;
+	return (str);
 }
-void	init_func_table(char *(**tabf)(char **prct, char *now, t_fparam *p), int *first)
+
+char	*set_parse_error(char *now, t_fparam *p)
+{
+	now = get_char_toend(now, '%');
+	init_fparam(p, now);
+	return (now + ((*now) ? 1: 0));
+}
+
+void	init_func_table(char *(**tabf)(char *now, t_fparam *p), int *first)
 {
 	(void)tabf;
 	int	i;
@@ -112,32 +112,52 @@ void	init_func_table(char *(**tabf)(char **prct, char *now, t_fparam *p), int *f
 		tabf['m'] = NULL;
 }
 
+void	push_param(t_list **beg, t_list *node)
+{
+	static	t_list *beg_lst = NULL;
 
+	if (beg && *beg)
+		beg_lst = *beg;
+	if (node)
+	{
+		node->next = *beg;;
+		*beg = node;
+	}
+}
+
+void	del_param(void *param, size_t size)
+{
+	(void)size;
+	free(param);
+}
 
 //*f(char **, char *, t_fparam *)
 void	main_parsing(const char *format, va_list beg)
 {
+	t_list			*beg_param;
 	va_list			current;
 	static	int		first = 1;
-	static	char	*(*tabf[256])(char **prct, char *now, t_fparam *p);
+	static	char	*(*tabf[256])(char *now, t_fparam *p);
 	char		*cursor;
-	char		*prev_hard;		// la precedente chaine brute
 	t_fparam		param_arg;
 	(void)tabf;(void)format;(void)beg;(void)current;
 
 //	va_copy(current, beg);
 	if (first)
 		init_func_table(tabf, &first);
-	cursor = (char *)format;
-	prev_hard = (char *)format;
-	init_fparam(&param_arg);
-	// TODO: wait for prct
+	beg_param = NULL;
+
+	push_param(&beg_param, NULL);
+	param_arg.beg_sec = (char *)format;
+	param_arg.prct = get_char_toend((char*)format, '%');
+
+	cursor = param_arg.prct;
+	init_fparam(&param_arg, cursor);
 	while (*cursor)
 	{
-		cursor = tabf[*((unsigned char*)cursor)](&prev_hard, cursor, &param_arg);
-		// process the chain
-			// all the type_convert option must find the next prct and print between
+		cursor = tabf[*((unsigned char*)cursor)](cursor, &param_arg);
 	}
+	ft_lstdel(&beg_param, del_param);
 	// TODO: if no error --> PRINT
 }
 

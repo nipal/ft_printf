@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/07 05:38:18 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 07:27:03 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "libft.h"
 # include "bistromatique.h"
 
-/////  integer //////////
+//  integer //////////
 # define SYM_ASK 0
 # define SYM_MIN 1
 # define SYM_MAJ 2
@@ -74,6 +74,7 @@ typedef	enum	e_stamen_id
 	//	#0 parsing state
 	e_id_parse_error = 0,
 	e_id_long_double,
+	e_id_base_majuscule,
 
 	e_id_has_precision = 8,
 	e_id_has_min_width,
@@ -107,6 +108,7 @@ typedef	enum	e_stament
 	//	#0 parsing state
 	e_parse_error				= 1l << e_id_parse_error,
 	e_cast_long_double 			= 1l << e_id_long_double,
+	e_base_majuscule			= 1l << e_id_base_majuscule,
 
 	e_has_precision				= 1l << e_id_has_precision,
 	e_has_min_width				= 1l << e_id_has_min_width,
@@ -165,7 +167,9 @@ typedef	struct	s_fparam
 	int		width;			// l'entier qui corespond a la taille minimum, neg si addr
 	int		precision;		// l'entier qui corespond a la precision, neg si addr
 	t_type	arg;			// la valeur de l'argument a traiter et sont type
-
+	char	*beg_sec;
+	char	*prct;
+	int		base;			// on staque la base
 }				t_fparam;
 
 //typedef	struct	s_fparse
@@ -176,13 +180,13 @@ typedef	struct	s_fparam
 
 
 
-char	*flag_add_plus(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_minus(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_space(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_zero(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_lang_nb(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_separate(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_hash(char **prev_hard, char *now, t_fparam *p);
+char	*flag_add_plus(char *now, t_fparam *p);
+char	*flag_add_minus(char *now, t_fparam *p);
+char	*flag_add_space(char *now, t_fparam *p);
+char	*flag_add_zero(char *now, t_fparam *p);
+char	*flag_add_lang_nb(char *now, t_fparam *p);
+char	*flag_add_separate(char *now, t_fparam *p);
+char	*flag_add_hash(char *now, t_fparam *p);
 
 
 //	converter
@@ -230,30 +234,30 @@ int		calcul_bistro(int expo, int mantis, t_bistro *res, int precision);
 */
 
 char	*get_number(char *format, int *number);
-char	*set_senario_nbr(char **prev_hard, char *now, t_fparam *p);
-char	*set_senario_star(char **prev_hard, char *now, t_fparam *p);
-char	*set_senario_point(char **prev_hard, char *now, t_fparam *p);
+char	*set_senario_nbr(char *now, t_fparam *p);
+char	*set_senario_star(char *now, t_fparam *p);
+char	*set_senario_point(char *now, t_fparam *p);
 
 /*
 **	pars_func.c
 */
-char	*set_parse_error(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_plus(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_minus(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_space(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_zero(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_lang_nb(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_separate(char **prev_hard, char *now, t_fparam *p);
-char	*flag_add_hash(char **prev_hard, char *now, t_fparam *p);
+char	*set_parse_error(char *now, t_fparam *p);
+char	*flag_add_plus(char *now, t_fparam *p);
+char	*flag_add_minus(char *now, t_fparam *p);
+char	*flag_add_space(char *now, t_fparam *p);
+char	*flag_add_zero(char *now, t_fparam *p);
+char	*flag_add_lang_nb(char *now, t_fparam *p);
+char	*flag_add_separate(char *now, t_fparam *p);
+char	*flag_add_hash(char *now, t_fparam *p);
 
-char	*flag_set_size_unsigned(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_s1(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_s2(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_s4(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_s8(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_u1(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_u2(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_u4(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_cast_u8(char **prev_hard, char *now, t_fparam *p);
-char	*flag_set_long_double(char **prev_hard, char *now, t_fparam *p);
+char	*flag_set_size_unsigned(char *now, t_fparam *p);
+char	*flag_set_cast_s1(char *now, t_fparam *p);
+char	*flag_set_cast_s2(char *now, t_fparam *p);
+char	*flag_set_cast_s4(char *now, t_fparam *p);
+char	*flag_set_cast_s8(char *now, t_fparam *p);
+char	*flag_set_cast_u1(char *now, t_fparam *p);
+char	*flag_set_cast_u2(char *now, t_fparam *p);
+char	*flag_set_cast_u4(char *now, t_fparam *p);
+char	*flag_set_cast_u8(char *now, t_fparam *p);
+char	*flag_set_long_double(char *now, t_fparam *p);
 #endif
