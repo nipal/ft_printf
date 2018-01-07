@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 07:44:34 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 17:58:39 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/06 03:09:32 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -989,6 +989,13 @@ void	test_valid_flag()
 	printf("%P\n", &a);
 }
 
+void	zero_long_double()
+{
+	long	double	a = 0;
+
+	print_bit_str(&a, sizeof(long double), "long double:	");
+}
+
 int	main(int ac, char **av)
 {
 //	test_with_ret();
@@ -1027,8 +1034,11 @@ int	main(int ac, char **av)
 	
 //	test_precision_float();
 	
-	pritf_separator_test();
+//	pritf_separator_test();
 //	test_valid_flag();
+
+	zero_long_double();
+
 	return (0);
 }
 

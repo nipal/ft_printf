@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 11:11:15 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/07 01:44:23 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,36 +25,7 @@
 # define SYM_MAJ 2
 /////////////////////////
 
-
-
-typedef	enum	e_stament
-{
-	// parsing state
-	e_valid_inside		= 1l << 0,
-	e_end_prct			= 1l << 1,
-	e_parse_error		= 1l << 2,
-	e_end_parsing		= 1l << 3,
-
-	// parsing 
-	e_has_precision		= 1l << 4,	
-	e_has_precision_ptr	= 1l << 5,		
-	e_has_min_width_	= 1l << 6,	
-	e_has_min_width_ptr	= 1l << 7,	
-	e_is_casted			= 1l << 8,	
-
-	// flag
-	e_flag_plus		= 1l << 9,
-	e_flag_minus	= 1l << 10,
-	e_flag_space	= 1l << 11,
-	e_flag_zero		= 1l << 12,
-	e_flag_lang_nb	= 1l << 13,
-	e_flag_sparate	= 1l << 14,
-	e_flag_hash		= 1l <<	15,
-}				t_state;
-
-
-
-// init parsing
+// /////////////////////////////////////
 typedef	enum	e_type
 {
 	e_char = 0,
@@ -94,15 +65,98 @@ typedef	struct	s_type
 	t_id_type	id;
 	t_utype		val;
 }				t_type;
+/////////////////////////////////////////////
 
+
+/////////////////////////////////////////////
+typedef	enum	e_stamen_id
+{
+	//	#0 parsing state
+	e_id_parse_error = 0,
+
+	e_id_has_precision = 8,
+	e_id_has_min_width,
+	e_id_has_value_arg,
+	e_id_has_precision_arg,
+	e_id_has_min_width_arg,
+	e_id_has_precision_next_arg,
+	e_id_has_min_width_next_arg,
+
+	e_id_flag_plus	= 16,
+	e_id_flag_minus,
+	e_id_flag_space,
+	e_id_flag_zero,
+	e_id_flag_lang_nb,
+	e_id_flag_sparate,
+	e_id_flag_hash,
+
+	e_id_size_defined = 56,		// 57
+	e_id_is_unsigned,			// permet de faire une focntion de chaque
+	e_id_size_caste,			// 58
+
+	e_id_end_enum =  63
+
+}				t_state_id;
+
+typedef	enum	e_stament
+{
+	//	#0 parsing state
+	e_parse_error			= 1l << e_id_parse_error,
+
+	e_has_precision				= 1l << e_id_has_precision,
+	e_has_min_width				= 1l << e_id_has_min_width,
+	e_has_value_arg				= 1l << e_id_has_value_arg,
+	e_has_precision_arg 		= 1l << e_id_has_precision_arg,
+	e_has_min_width_arg 		= 1l << e_id_has_min_width_arg,
+	e_has_precision_next_arg 	= 1l << e_id_has_precision_arg,
+	e_has_min_width_next_arg 	= 1l << e_id_has_min_width_arg,
+                        	                               
+	e_flag_plus					= 1l << e_id_flag_plus,        
+	e_flag_minus				= 1l << e_id_flag_minus,       
+	e_flag_space				= 1l << e_id_flag_space,       
+	e_flag_zero					= 1l << e_id_flag_zero,        
+	e_flag_lang_nb				= 1l << e_id_flag_lang_nb,     
+	e_flag_sparate				= 1l << e_id_flag_sparate,     
+	e_flag_hash					= 1l <<	e_id_flag_hash,        
+
+	e_size_define				= 1l << e_id_size_defined,
+	e_is_unsigned 				= 1l << e_id_is_unsigned,
+	e_size_caste  				= 1l << e_id_size_caste,
+	 	//	#7 size cast		
+	e_end_enum 					= 1l << e_id_end_enum
+}				t_state;
+
+
+// precision, min_siz, id_arg
+// -------------------------------------------------------------------------
+//					| ------------------ |
+// 	nbr				|					 | is min_size
+// 	*,				|-> define size min	 | next_arg is min_size		(int)
+// 	*,(nbr,$)		| 					 | is id_arg minsize 		(int)
+//					| ------------------ |
+
+//					| ------------------ |
+// 	nbr,$			|->    arg value     | is id_arg of value
+//					| ------------------ |
+
+//					| ------------------ |
+// '.',nbr			|					 | is precision
+// '.',*			|-> define size min	 | next_arg is precision	(int)
+// '.',(*,nbr,$)	| 					 | is id_arg precisione 	(int)
+//					| ------------------ |
+// -------------------------------------------------------------------------
+//
 // data to proces arg
 typedef	struct	s_fparam
 {
+	long	state;			// la ou toute les option sont determiner
+	int		id_width;
+	int		id_preci;
+	int		id_arg;
+
 	int		width;			// l'entier qui corespond a la taille minimum, neg si addr
 	int		precision;		// l'entier qui corespond a la precision, neg si addr
-	long	state;			// la ou toute les option sont determiner
 	t_type	arg;			// la valeur de l'argument a traiter et sont type
-
 }				t_fparam;
 
 //typedef	struct	s_fparse
