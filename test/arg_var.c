@@ -6,28 +6,90 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/06 11:45:00 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/06 12:12:55 by fjanoty          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   arg_var.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/01/06 08:31:28 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/06 11:44:19 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/09 13:43:31 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdlib.h>	// -> exit(0)
 #include <stdio.h>	// printf
 #include <stdarg.h>	// va_list + va_...
+#include <string.h>
 
 // type: char, short, int, long, float, double, long double
+
+//char	*name_type(int id)
+//{
+//	char 	tab[13][32] = { "char", "short", "int", "long", "unsigned char", "unsigned short", "unsigned int", "unsigned long", "float", "double", "long double", "char *", "void *"};
+//	
+//	if (id < 0 || id >= 13)
+//		return (NULL);
+//	return (((char*)tab) + (id * 32) * sizeof(char));
+//}
 //
+//
+
+
+
+//		c;		//	0
+//		s;		//	1
+//		i;		//	2
+//		l;		//	3
+//		uc;		//	4
+//		us;		//	5
+//		ui;		//	6
+//		ul;		//	7
+//		f;		//	8
+//		d;		//	9
+//		ld;		//	10
+//		*t;		//	11
+//		*p;		//	12
+
+char	*get_name_type(int id_type)
+{
+	static	char	name_type[13][20] = {	"char           ",
+											"short          ",
+											"int            ",
+											"long           ",
+											"unsigned char  ",
+											"unsigned short ",
+											"unsigned int   ",
+											"unsigned long  ",
+											"float          ",
+											"double         ",
+											"long double    ",
+											"char *         ",
+											"void *         "
+	
+	};
+	if (id_type >= 0 && id_type < 13)
+		return (((char *)name_type) + (20 * id_type) * sizeof(char));
+	else
+		return (NULL);
+}
+
+int		get_size_type(int id_type)
+{
+	static	int	size_type[13] = {
+									sizeof(char           ),	//	0
+									sizeof(short          ),    //	1
+									sizeof(int            ),    //	2
+									sizeof(long           ),    //	3
+									sizeof(unsigned char  ),    //	4
+									sizeof(unsigned short ),    //	5
+									sizeof(unsigned int   ),    //	6
+									sizeof(unsigned long  ),    //	7
+									sizeof(float          ),    //	8
+									sizeof(double         ),    //	9
+								//	sizeof(long double    ),    //	10
+									10,    //	10
+									sizeof(char *         ),    //	11
+									sizeof(void *         )};   //	12
+
+	if (id_type >= 0 && id_type < 13)
+		return (size_type[id_type]);
+	return (-1);
+}
+
 typedef	union	u_type
 {
 	char				c;		//	1
@@ -177,8 +239,8 @@ void	init_get_val(t_utype (*f[13])(va_list ap))
 		f[8] = get_float;
 		f[9] = get_double;
 		f[10] = get_long_double;
-		f[11] = get_ptr;
-		f[12] = get_txt;
+		f[11] = get_txt;
+		f[12] = get_ptr;
 }
 
 void	print_char(t_utype val)
@@ -307,26 +369,7 @@ t_utype	get_arg(int type_pass, int type_final, int id_end, va_list ap)
 }
 
 
-char	*get_name_type(int id_type)
-{
-	static	char	name_type[13][20] = {	"char           ",
-											"short          ",
-											"int            ",
-											"long           ",
-											"unsigned char  ",
-											"unsigned short ",
-											"unsigned int   ",
-											"unsigned long  ",
-											"float          ",
-											"double         ",
-											"long double    ",
-											"pointer        ",
-											"string         "};
-	if (id_type >= 0 && id_type < 13)
-		return (((char *)name_type) + (20 * id_type) * sizeof(char));
-	else
-		return (NULL);
-}
+
 //	t_utype	get_arg(int type_pass, int type_final, int id_end, va_list ap)
 
 // test all possibilities
@@ -466,12 +509,237 @@ void	test_1()
 	test_variadique_all(12, c, s, i, l, uc, us, ui, ul, f, d, ld, p);
 
 }
+///////////////////////////////////////////
+void	print_bit_str(unsigned char *data, int size, char *s)
+{
+	int	i;
+	int	j;
+	int	nb_char;
+	int	id;
+	char	*str;
+
+	nb_char = (size * 8);
+	if (!(str = malloc(((nb_char) + 1) * sizeof(char))))
+		return ;
+	str[(size * 8)] = '\0';
+	j = size - 1;
+	while (j >= 0)
+	{
+		i = 7;
+		while (i >= 0)
+		{
+			id = (7 - i) + ((size - 1 - j) * 8);
+			str[id] = (data[j] & (1 << i)) ? '1' : '0';
+			i--;
+		}
+		j--;
+	}
+	printf("%s%s\n", s, str);
+	free(str);
+/**/}
+
+void	print_bit_buffer(unsigned char *data, int size, char *str)
+{
+	int	i;
+	int	j;
+	int	nb_char;
+	int	id;
+
+	nb_char = (size * 8);
+	str[(size * 8)] = '\0';
+	j = size - 1;
+	while (j >= 0)
+	{
+		i = 7;
+		while (i >= 0)
+		{
+			id = (7 - i) + ((size - 1 - j) * 8);
+			str[id] = (data[j] & (1 << i)) ? '1' : '0';
+//			printf("--id:%d[%c]--	", id, str[id]);
+			i--;
+		}
+		j--;
+	}
+	str[(size * 8)] = '\0';
+//	printf("\n");
+//	printf("%s%s\n", s, str);
+//	free(str);
+/**/}
+
+
+
+//t_utype	get_arg(int type_pass, int type_final, int id_end, va_list ap)
+
+void	test_arg(int nb_arg, int type_end, ...)
+{
+	int	i;
+	int	j;
+	t_utype	tab_val[13], tmp;
+	static	int	begin = 1;
+	static	t_utype	(*f[13])(va_list ap);
+	va_list	ap;
+	va_list	copy;
+	t_utype	val;
+
+	char	valu[256];
+
+	if (begin)
+	{
+		begin = 0;
+		init_get_val(f);
+	}
+	va_start(ap, type_end);
+
+	// pour tout les type
+	j = 0;
+	while (j < 13)
+	{
+		va_copy(copy, ap);
+		i = 0;
+		while (i < (nb_arg - 1))
+		{
+			tmp = f[j](copy);
+			i++;
+		}
+		tab_val[j] = f[type_end](copy);
+		va_end(copy);
+		j++;
+	}
+	printf("-----------------------------------------------\n");
+	j = 0;
+	while (j < 13)
+	{
+		print_bit_buffer((void*)(tab_val + j), get_size_type(type_end), valu);
+		printf("|%s|->	[%s]{%s}\n", get_name_type(j), valu, get_name_type(type_end));
+		j++;
+	}
+	printf("\n");
+	va_end(ap);
+}
+//		c;		//	0
+//		s;		//	1
+//		i;		//	2
+//		l;		//	3
+//		uc;		//	4
+//		us;		//	5
+//		ui;		//	6
+//		ul;		//	7
+//		f;		//	8
+//		d;		//	9
+//		ld;		//	10
+//		*t;		//	11
+//		*p;		//	12
+
+
+void	diff_prioriti_variadique()
+{
+	t_utype		uval;
+	char	 	c1 = 0  ,c2 = -1, c3 = 1, c4 = 0b10101010, c5 = 0b1111;
+	short	 	s1 = 0  ,s2 = -1, s3 = 1, s4 = 0b1010101010101010, s5 = 0b11111111;
+	int		 	i1 = 0  ,i2 = -1, i3 = 1, i4 = 0b10101010101010101010101010101010, i5 = 0b1111111111111111;
+	float	 	f1 = 0  ,f2 = -1, f3 = 1, f4 = 0b10101010101010101010101010101010, f5 = 0b1111111111111111;
+	long	 	l1 = 0  ,l2 = -1, l3 = 1, l4 = 0b1010101010101010101010101010101010101010101010101010101010101010, l5 = 0b11111111111111111111111111111111;
+	double	 	d1 = 0  ,d2 = -1, d3 = 1, d4 = 0b1010101010101010101010101010101010101010101010101010101010101010, d5 = 0b11111111111111111111111111111111;
+	char		*t1 = 0  ,*t2 = -1, *t3 = 1, *t4 = 0b1010101010101010101010101010101010101010101010101010101010101010, t5 = 0b11111111111111111111111111111111;
+	long double	ld1 = 0 ,ld2 = 1.0 / 0.0, ld3 = 0.0 / 0.0, ld4 = 0.0000000000000000000000000000000000000001112223334445566777, ld5 = 0b1111111111111111111111111111111111111111;
+	////////////////////////
+	
+
+	memset(&uval, 0x1, 10);
+//	uval.ld = 4242.13371337;
+//	uval.ld = 424242.0001337;
+//	ld2 = uval.ld;
+
+
+	c2  = uval.c ; 
+	s2  = uval.s ; 
+	i2  = uval.i ; 
+	f2  = uval.f ; 
+	l2  = uval.l ; 
+	d2  = uval.d ; 
+	t2  = uval.t ; 
+	ld2 = uval.ld ; 
+
+
+
+	print_bit_str(&uval, sizeof(uval), "===>		");
+//printf("\n__________test_aligne__________\n");	
+//
+//printf("\n__________smal->big__________\n");	
+//
+//printf("\n__________big->smal__________\n");	
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(0));
+//	char
+	printf("%hhd\n", uval.c);
+	test_arg(5, 0,  c1, c2, c3, c4, c2);
+	test_arg(9, 0,  c3, s3, i3, f3, l3, d3, t3, ld3, c2);
+	test_arg(9, 0,  ld3, t3, d3, l3, f3, i3, s3, c3, c2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(1));
+//	short
+	printf("%hd\n", uval.s);
+	test_arg(5, 1,  s1, s2, s3, s4, s2);
+	test_arg(9, 1,  c3, s3, i3, f3, l3, d3, t3, ld3, s2);
+	test_arg(9, 1,  ld3, t3, d3, l3, f3, i3, s3, c3, s2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(2));
+//	int
+	printf("%d\n", uval.i);
+	test_arg(5, 2,  i1, i2, i3, i4, i2);
+	test_arg(9, 2,  c3, s3, i3, f3, l3, d3, t3, ld3, i2);
+	test_arg(9, 2,  ld3, t3, d3, l3, f3, i3, s3, c3, i2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(8));
+// 	float
+	printf("%f\n", uval.f);
+	test_arg(5, 8,  f1, f2, f3, f4, f2);
+	test_arg(9, 8,  c3, s3, i3, f3, l3, d3, t3, ld3, f2);
+	test_arg(9, 8,  ld3, t3, d3, l3, f3, i3, s3, c3, f2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(3));
+//	long
+	printf("%ld\n", uval.l);
+	test_arg(5, 3,  l1, l2, l3, l4, l2);
+	test_arg(9, 3,  c3, s3, i3, f3, l3, d3, t3, ld3, l2);
+	test_arg(9, 3,  ld3, t3, d3, l3, f3, i3, s3, c3, l2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(9));
+//	double
+	printf("%f\n", uval.d);
+	test_arg(5, 9, d1, d2, d3, d4, d2);
+	test_arg(9, 9, c3, s3, i3, f3, l3, d3, t3, ld3, d2);
+	test_arg(9, 9, ld3, t3, d3, l3, f3, i3, s3, c3, d2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(11));
+// 	text
+	printf("%p\n", uval.t);
+	test_arg(5, 11, t1, t2, t3, t4, t2);
+	test_arg(9, 11, c3, s3, i3, f3, l3, d3, t3, ld3, t2);
+	test_arg(9, 11, ld3, t3, d3, l3, f3, i3, s3, c3, t2);
+
+printf("\n=============================\n=======%s=======\n=============================\n", get_name_type(10));
+//	long double
+	printf("%Lf\n", uval.ld);
+	test_arg(5, 10, ld1, ld2, ld3, ld4, ld2);
+	test_arg(9, 10, c3, s3, i3, f3, l3, d3, t3, ld3, ld2);
+	test_arg(9, 10, ld3, t3, d3, l3, f3, i3, s3, c3, ld2);
+	test_arg(9, 10, ld1, ld2, ld3, ld3, c1, i2, c2, c3, ld2);
+}
 
 int	main()
 {
 //	test_1();
 //	test_0();
 //	test_neg1();
-	test_prog();
+//	test_prog();
+	
+	diff_prioriti_variadique();
+	
+//	printf("sizeof(long double):%d\n", get_size_type(10));
 	return (0);
 }
+
+/*
+	integer, ptr:	-->	(pop) LONG
+*/

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/07 07:41:43 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/09 04:39:40 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,6 @@ void	init_func_table(char *(**tabf)(char *now, t_fparam *p), int *first)
 //variable
 		tabf['*'] = set_senario_star;
 		tabf['.'] = set_senario_point;
-// number
 		tabf['1'] = set_senario_nbr;
 		tabf['2'] = set_senario_nbr;
 		tabf['3'] = set_senario_nbr;
@@ -85,31 +84,31 @@ void	init_func_table(char *(**tabf)(char *now, t_fparam *p), int *first)
 
 
 // typefiled
-		tabf['%'] = NULL;
-		tabf['d'] = NULL;
-		tabf['D'] = NULL;
-		tabf['i'] = NULL;
-		tabf['u'] = NULL;
-		tabf['U'] = NULL;
-		tabf['o'] = NULL;
-		tabf['O'] = NULL;
-		tabf['x'] = NULL;
-		tabf['X'] = NULL;
-		tabf['f'] = NULL;
-		tabf['F'] = NULL;
-		tabf['e'] = NULL;
-		tabf['E'] = NULL;
-		tabf['g'] = NULL;
-		tabf['G'] = NULL;
-		tabf['a'] = NULL;
-		tabf['A'] = NULL;
-		tabf['c'] = NULL;
-		tabf['C'] = NULL;
-		tabf['s'] = NULL;
-		tabf['S'] = NULL;
-		tabf['p'] = NULL;
-		tabf['n'] = NULL;
-		tabf['m'] = NULL;
+		tabf['i'] = parse_decimal_signed;
+		tabf['d'] = parse_decimal_signed;
+		tabf['D'] = parse_decimal_signed_cap;
+		tabf['u'] = parse_decimal_unsigned;
+		tabf['U'] = parse_decimal_unsigned_cap;
+		tabf['o'] = parse_octal_unsigned;
+		tabf['O'] = parse_octal_unsigned_cap;
+		tabf['x'] = parse_exa_unsigned;
+		tabf['X'] = parse_exa_unsigned_cap;
+		tabf['f'] = parse_floating;
+		tabf['F'] = parse_floating_cap;
+		tabf['e'] = parse_expo_dec;
+		tabf['E'] = parse_expo_dec_cap;
+		tabf['g'] = parse_expo_dec_mixt;
+		tabf['G'] = parse_expo_dec_mixt_cap;
+		tabf['a'] = parse_expo_exa;
+		tabf['A'] = parse_expo_exa_cap;
+		tabf['c'] = parse_char;
+		tabf['C'] = parse_char_unicode;
+		tabf['s'] = parse_str;
+		tabf['S'] = parse_str_unicode;
+		tabf['p'] = parse_ptr;
+		tabf['n'] = parse_nbc_print;
+		tabf['m'] = parse_perror;
+		tabf['%'] = parse_prct;
 }
 
 void	push_param(t_list **beg, t_list *node)
