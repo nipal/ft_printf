@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 05:43:49 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 16:03:02 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 04:40:14 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,7 @@ void	float_get_value(float f, int *sign, int *expo, int *mantis)
 
 # define BUFF_SIZE 512
 //	apres on integrera cette fonction dans un truc qui construit la chaine de caractere a push
-void	print_float(float f, int precision)
+void	print_float_example(float f, int precision)
 {
 	char		buff[BUFF_SIZE];
 	t_bistro	sum;

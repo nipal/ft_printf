@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/12 04:19:15 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 05:07:55 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	del_param(void *param, size_t size)
 **	print the param
 */
 
+
 //*f(char **, char *, t_fparam *)
 void	main_parsing(const char *format, va_list beg)
 {
@@ -154,12 +155,19 @@ void	main_parsing(const char *format, va_list beg)
 	param_arg.beg_sec = (char *)format;
 	param_arg.prct = get_char_toend((char*)format, '%');
 
+	//	stack the param
 	cursor = param_arg.prct;
 	init_fparam(&param_arg, cursor);
 	while (*cursor)
 	{
 		cursor = tabf[*((unsigned char*)cursor)](cursor, &param_arg);
+		ft_lstadd(&beg_param, ft_lstnew(&param_arg, sizeof(t_fparam)));
 	}
+	//	count the arg, get the arg
+	//		on scan les type [d'argument] et de [valeur] qui accedent aux arguemnt
+	//		on depope tout gentillement
+	//	push into the buffer
+	//	print all
 	ft_lstdel(&beg_param, del_param);
 	// TODO: if no error --> PRINT
 }

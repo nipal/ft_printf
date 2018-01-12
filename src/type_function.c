@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 05:40:08 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/12 04:22:46 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 08:37:31 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 char	*parse_prct(char *now, t_fparam *p)
 {
 	(void)p;
-	//	push le parametre
+	//	On ajoute la fonction de draw, ou on recupere les parametre
 	return (now);
 }
 

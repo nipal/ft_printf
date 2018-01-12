@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/09 04:36:10 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 05:07:55 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,12 +164,19 @@ typedef	struct	s_fparam
 	int		id_preci;
 	int		id_arg;
 
+	//	set the prinsing param
 	int		width;			// l'entier qui corespond a la taille minimum, neg si addr
 	int		precision;		// l'entier qui corespond a la precision, neg si addr
 	t_type	arg;			// la valeur de l'argument a traiter et sont type
 	char	*beg_sec;
 	char	*prct;
 	int		base;			// on staque la base
+
+	// func to print the value
+	char	dash[5];		//	--> the thing 
+	char 	fill_before;	//	|	
+	char 	signe;			// 	| if 0 -> do nothing nothing
+	char	fill_after;		//	|
 }				t_fparam;
 
 //typedef	struct	s_fparse
@@ -224,7 +231,7 @@ int		buffer(char *str, int size, int fd);	// si str est NULL on imprime le buffe
 **	floating_number.c
 */
 
-void	print_float(float f, int precision);
+void	print_float_example(float f, int precision);
 void	float_get_value(float f, int *sign, int *expo, int *mantis);
 int		calcul_bistro2(int expo, int mantis, t_bistro *res, int precision);
 int		calcul_bistro(int expo, int mantis, t_bistro *res, int precision);
@@ -264,6 +271,36 @@ char	*flag_set_long_double(char *now, t_fparam *p);
 /*
 **	type_function.c	
 */
+
+char	*print_prct(char *buff, int *size, t_fparam *p);
+char	*print_dec_signed(char *buff, int *size, t_fparam *p);
+char	*print_dec_signed_cap(char *buff, int *size, t_fparam *p);
+char	*print_dec_unsigned(char *buff, int *size, t_fparam *p);
+char	*print_dec_unsigned_cap(char *buff, int *size, t_fparam *p);
+char	*print_oct_unsigned(char *buff, int *size, t_fparam *p);
+char	*print_oct_unsigned_cap(char *buff, int *size, t_fparam *p);
+char	*print_exa_unsigned(char *buff, int *size, t_fparam *p);
+char	*print_exa_unsigned_cap(char *buff, int *size, t_fparam *p);
+char	*print_float(char *buff, int *size, t_fparam *p);
+char	*print_float_cap(char *buff, int *size, t_fparam *p);
+char	*print_expo_dec(char *buff, int *size, t_fparam *p);
+char	*print_expo_dec_cap(char *buff, int *size, t_fparam *p);
+char	*print_expo_dec_mixt(char *buff, int *size, t_fparam *p);
+char	*print_expo_dec_mixt_cap(char *buff, int *size, t_fparam *p);
+char	*print_expo_exa(char *buff, int *size, t_fparam *p);
+char	*print_expo_exa_cap(char *buff, int *size, t_fparam *p);
+char	*print_char(char *buff, int *size, t_fparam *p);
+char	*print_char_unicode(char *buff, int *size, t_fparam *p);
+char	*print_str(char *buff, int *size, t_fparam *p);
+char	*print_str_unicode(char *buff, int *size, t_fparam *p);
+char	*print_ptr(char *buff, int *size, t_fparam *p);
+char	*print_nbc_print(char *buff, int *size, t_fparam *p);
+char	*print_perror(char *buff, int *size, t_fparam *p);
+
+/*
+**	type_function.c	
+*/
+
 char	*parse_prct(char *now, t_fparam *p);
 char	*parse_dec_signed(char *now, t_fparam *p);
 char	*parse_dec_signed_cap(char *now, t_fparam *p);
@@ -286,6 +323,7 @@ char	*parse_char_unicode(char *now, t_fparam *p);
 char	*parse_str(char *now, t_fparam *p);
 char	*parse_str_unicode(char *now, t_fparam *p);
 char	*parse_ptr(char *now, t_fparam *p);
-char	*parse_nbc_print(char *now, t_fparam *p);
+char	*parse_nbc_parse(char *now, t_fparam *p);
 char	*parse_perror(char *now, t_fparam *p);
+
 #endif
