@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 05:40:08 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/09 09:36:46 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 04:22:46 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,7 @@
 
 // une fonction qui va un peu orchestrer l'evenement
 
-char	*print_unsigned_decimal(char *now, t_fparam *p)
-{
-	(void)p;
 
-	//	get value and 
-	return (now);
-}
 /*
 #define BUFF_SIZ 128
 	static	char	buf[BUFF_SIZ];
@@ -45,42 +39,42 @@ char	*parse_prct(char *now, t_fparam *p)
 	return (now);
 }
 
-char	*parse_decimal_signed(char *now, t_fparam *p)
+char	*parse_dec_signed(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_decimal_signed_cap(char *now, t_fparam *p)
+char	*parse_dec_signed_cap(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_decimal_unsigned(char *now, t_fparam *p)
+char	*parse_dec_unsigned(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_decimal_unsigned_cap(char *now, t_fparam *p)
+char	*parse_dec_unsigned_cap(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_octal_unsigned(char *now, t_fparam *p)
+char	*parse_oct_unsigned(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_octal_unsigned_cap(char *now, t_fparam *p)
+char	*parse_oct_unsigned_cap(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
@@ -102,14 +96,14 @@ char	*parse_exa_unsigned_cap(char *now, t_fparam *p)
 }
 
 
-char	*parse_floating(char *now, t_fparam *p)
+char	*parse_float(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre
 	return (now);
 }
 
-char	*parse_floating_cap(char *now, t_fparam *p)
+char	*parse_float_cap(char *now, t_fparam *p)
 {
 	(void)p;
 	//	push le parametre

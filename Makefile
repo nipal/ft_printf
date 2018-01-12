@@ -6,7 +6,7 @@
 #    By: nperrin <nperrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/05 01:28:32 by fjanoty           #+#    #+#              #
-#    Updated: 2018/01/07 05:40:49 by fjanoty          ###   ########.fr        #
+#    Updated: 2018/01/11 20:58:05 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC_NAME 	= 						\
 				parsing.c			\
 				pars_func.c			\
 				precision_func.c	\
+				print_function.c	\
 				floating_number.c	\
 
 

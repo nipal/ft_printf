@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/09 04:39:40 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 04:19:15 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,17 +84,17 @@ void	init_func_table(char *(**tabf)(char *now, t_fparam *p), int *first)
 
 
 // typefiled
-		tabf['i'] = parse_decimal_signed;
-		tabf['d'] = parse_decimal_signed;
-		tabf['D'] = parse_decimal_signed_cap;
-		tabf['u'] = parse_decimal_unsigned;
-		tabf['U'] = parse_decimal_unsigned_cap;
-		tabf['o'] = parse_octal_unsigned;
-		tabf['O'] = parse_octal_unsigned_cap;
+		tabf['i'] = parse_dec_signed;
+		tabf['d'] = parse_dec_signed;
+		tabf['D'] = parse_dec_signed_cap;
+		tabf['u'] = parse_dec_unsigned;
+		tabf['U'] = parse_dec_unsigned_cap;
+		tabf['o'] = parse_oct_unsigned;
+		tabf['O'] = parse_oct_unsigned_cap;
 		tabf['x'] = parse_exa_unsigned;
 		tabf['X'] = parse_exa_unsigned_cap;
-		tabf['f'] = parse_floating;
-		tabf['F'] = parse_floating_cap;
+		tabf['f'] = parse_float;
+		tabf['F'] = parse_float_cap;
 		tabf['e'] = parse_expo_dec;
 		tabf['E'] = parse_expo_dec_cap;
 		tabf['g'] = parse_expo_dec_mixt;
@@ -129,6 +129,10 @@ void	del_param(void *param, size_t size)
 	(void)size;
 	free(param);
 }
+
+/*
+**	print the param
+*/
 
 //*f(char **, char *, t_fparam *)
 void	main_parsing(const char *format, va_list beg)

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/06 07:35:16 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/07 04:43:28 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/12 04:20:55 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,8 @@ char	*get_number(char *format, int *number)
 // precision
 // 		adrr
 
-char	*set_senario_star(char **prev_hard, char *now, t_fparam *p)
+char	*set_senario_star(char *now, t_fparam *p)
 {
-	(void)prev_hard;
 	char	*beg;
 	int		number;
 
@@ -52,7 +51,7 @@ char	*set_senario_star(char **prev_hard, char *now, t_fparam *p)
 	return (beg);
 }
 
-char	*set_senario_point(char **prev_hard, char *now, t_fparam *p)
+char	*set_senario_point(char *now, t_fparam *p)
 {
 	int				number;
 	char		c;
@@ -77,15 +76,14 @@ char	*set_senario_point(char **prev_hard, char *now, t_fparam *p)
 		p->state |= e_has_precision_next_arg;
 		return (beg);
 	}
-	return (set_parse_error(prev_hard, now, p));
+	return (set_parse_error(now, p));
 }
 
-char	*set_senario_nbr(char **prev_hard, char *now, t_fparam *p)
+char	*set_senario_nbr(char *now, t_fparam *p)
 {
 	int		number;
 	char	*beg;
 
-	(void)prev_hard;
 	beg = now;
 	if (*(now = get_number(now, &number)) == '$')
 	{
