@@ -6,7 +6,7 @@
 #    By: fjanoty <fjanoty@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/09/13 19:48:58 by fjanoty           #+#    #+#              #
-#    Updated: 2018/01/18 00:43:22 by fjanoty          ###   ########.fr        #
+#    Updated: 2018/01/20 02:45:46 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -82,7 +82,7 @@ SRC		= ft_atoi.c \
 		  ft_lstdel.c	\
 
 
-#CFLAGS = -Wall -Werror -g -fsanitize=address 
+CFLAGS = -Wall -Werror -g -fsanitize=address 
 
 OBJ		= $(SRC:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/07 07:55:57 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/18 01:33:17 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/20 02:51:52 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ void				ft_lstdelone(t_list **alst, void (*del)(void *, size_t))
 {
 	t_list	*tmp;
 
-	tmp = (*alst)->next;
 	if (*alst)
 	{
+		tmp = (*alst)->next;
 		del((*alst)->content, (*alst)->content_size);
+		*alst = tmp;
 	}
-	*alst = tmp;
 }
