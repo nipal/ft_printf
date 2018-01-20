@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/12 05:07:55 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/17 00:15:47 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	init_func_table(char *(**tabf)(char *now, t_fparam *p), int *first)
 		tabf['s'] = parse_str;
 		tabf['S'] = parse_str_unicode;
 		tabf['p'] = parse_ptr;
-		tabf['n'] = parse_nbc_print;
+	//	tabf['n'] = parse_nbc_print;
 		tabf['m'] = parse_perror;
 		tabf['%'] = parse_prct;
 }

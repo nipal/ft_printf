@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/12 05:07:55 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/17 04:45:31 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdarg.h>
 # include "libft.h"
 # include "bistromatique.h"
+# include <math.h>
 
 //  integer //////////
 # define SYM_ASK 0
