@@ -5,75 +5,162 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/12/10 07:04:38 by fjanoty           #+#    #+#             */
-/*   Updated: 2017/12/21 08:25:59 by fjanoty          ###   ########.fr       */
+/*   Created: 2018/01/28 18:03:13 by fjanoty           #+#    #+#             */
+/*   Updated: 2018/01/31 22:21:41 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-# define SIZE_BUFF	128 // + 1 |--> '\0'
 
-typedef	struct	s_buff
+/*
+** ///////////////////////////////////////////////////////
+*/
+
+void			buffer_init(t_buffer *b)
 {
-	char	buffer[SIZE_BUFF + 1];
-	int		id;
-}				t_buff;
+	b->current = &(b->beg);
+	b->beg.id = 0;
+	b->beg.next = NULL;
+	b->block_nb = 1;
+}
 
-//static	int		push_buffer(t_list *begin, int *nb_buffer, t_buff *buf)
-//{
-//	t_list	*node;
-//	int		size;
-//	int		nb_buff;
-//
-//	nb_buff = *nb_buffer;
-//	*nb_buffer = 0;
-//	size = (nb_buff * SIZE_BUFF) + buf->id;
-//	if (!(str = malloc((size + 1) * sizeof(char))))
-//		return (-1);
-//	ft_memmove(str + nb_buff * SIZE_BUFF, buf->buffer, buf->id);
-//	node = begin;
-//	while (nb_buff && node)
-//	{
-//		ft_memmove(str + nb_buff * SIZE_BUFF, node->content, SIZE_BUFF);
-//		node = node->next;
-//		nb_buff--;
-//	}
-//	write(fd, str, size);
-//	ft_lstdel(&begin);
-//	buf->id = 0;
-//	return (size);
-//}
-//
-//int		buffer(char *str, int size, int fd)
-//{
-//	static	t_list	*begin = NULL;
-//	static	t_buff	buf = {"", 0};
-//	static	int		nb_buff = 0;
-//	char			*str;
-//
-//	if (!str)
-//		return (push_buffer(begin, nb_buff, &buf));
-//	while (size > 0)
-//	{
-//		if ((SIZE_BUFF - buf.id) > size)
-//		{
-//			buf.id += size;
-//			ft_memmove(buf.buffer + buf.id, str, size);
-//			size = 0;
-//			continue ;
-//		}
-//		size -= SIZE_BUFF - buf.id;
-//		ft_memmove(buf.buffer + buf.id, str, SIZE_BUFF - buf.id);
-//		ft_lstadd(&begin, ft_lstnew(buf.buffer, buf.id));
-//		buf.id = 0;
-//		nb_buff++;
-//	}
-//	return (0);
-//}
-//
-//	la meme pour les floatant?
-//
-//
-		// on ecrit dans buf
-		// si il est plein on le push
-		// si str n'est pas vide on recomence
+static	void	buffer_node_add(t_buffer *b)
+{
+	t_buf	*node;
+
+	if (!(node = malloc(sizeof(t_buf))))
+		return ((void)dprintf(2, "t_buf alloc faille: %s : %d\n",
+					__FILE__, __LINE__ - 1));
+	node->id = 0;
+	node->next = NULL;
+	node->data[0] = '\0';
+	bzero(node->data, sizeof(node->data));
+	if (b->current)
+		b->current->next = node;
+	b->current = node;
+	b->block_nb++;
+}
+
+
+void			buffer_push_data(t_buffer *b, char *data, int size)
+{
+	int		rest;
+	int		jump;
+	t_buf	*buf;
+
+	buf = b->current;
+	while (size > 0)
+	{
+		rest = (BUFF_LARGE - buf->id);
+		jump = (rest >= size) ? size : rest;
+		memmove(buf->data + buf->id, data, jump);
+		buf->id += jump;
+		data += jump;
+		if (rest < size)
+		{
+			buffer_node_add(b);
+			buf = b->current;
+		}
+		size -= jump;
+	}
+}
+
+void			buffer_push_nchar(t_buffer *b, char c, int nb)
+{
+	int		rest;
+	int		jump;
+	t_buf	*buf;
+
+	buf = b->current;
+	while (nb > 0)
+	{
+		rest = (BUFF_LARGE - buf->id);
+		jump = (rest >= nb) ? nb : rest;
+		memset(buf->data + buf->id, c, jump);
+		buf->id += jump;
+		if (rest < nb)
+		{
+			buffer_node_add(b);
+			buf = b->current;
+		}
+		nb -= jump;
+	}
+}
+
+//	Il vaudrait mieux les vide tous sauf le premier...
+//	En fait on connaitra tout le temps le premier
+static	void	buffer_reset(t_buffer *b)
+{
+	t_buf	*node;
+	t_buf	*tmp;
+
+	node = b->beg.next;
+	while (node)
+	{
+		tmp = node->next;
+		free(node);
+		node = tmp;
+	}
+	buffer_init(b);
+}
+
+/*
+**	///////////////////////////////////////////////////////
+*/
+
+
+void			buffer_output_fd(t_buffer *b, int fd)
+{
+	t_buf	*node;
+
+	node = &(b->beg);
+	while (node)
+	{
+		write(fd, node->data, node->id);
+		node = node->next;
+	}
+	buffer_reset(b);
+}
+
+void	buffer_output_standar(t_buffer *b)
+{
+	buffer_output_fd(b, 0);
+	buffer_reset(b);
+}
+
+void			buffer_output_string(t_buffer *b, char *dest)
+{
+	t_buf	*node;
+	int	i;
+
+	i  = 0;
+	node = &(b->beg);
+	while (node)
+	{
+		memmove(dest + i * BUFF_LARGE, node->data, node->id);
+		node = node->next;
+		i++;
+	}
+	dest[i * BUFF_LARGE] = '\0';
+	buffer_reset(b);
+}
+
+void			buffer_output_string_size(t_buffer *b, char *dest, int len)
+{
+	int		id;
+	int		size;
+	t_buf	*node;
+
+	id = 0;
+	node = &(b->beg);
+	while (node && len > 0)
+	{
+		size = ((len - BUFF_LARGE) < 0) ? len : BUFF_LARGE;
+		memmove(dest + id, node->data, size);
+		node = node->next;
+		id += BUFF_LARGE;
+		len -= BUFF_LARGE;
+	}
+	dest[id - BUFF_LARGE + size] = '\0';
+	buffer_reset(b);
+}

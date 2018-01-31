@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:10:43 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/17 22:41:55 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/31 22:23:13 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -253,36 +253,57 @@ void	recurs_set_char_free(char *org, char *id_used, char *id_free, int curs, int
 	}
 }
 
-void	test_combin_recurs(char *org, char *tmp, int len, int end, int stape, int *sum, int (*f)(char *s))
+/*
+	char *org			: chaine originale
+	char *tmp			: chaine re assembler
+	int len				: nb char in originale
+	int stape_end		: nb char combined -> stop condition
+	int stape			: actual stape
+	int *sum			: sum of all combined char
+	int (*f)(char *s)	: print fuction or what ever callback
+*/
+
+void	test_combin_recurs(char *org, char *tmp, int len, int stape_end, int stape, int *sum, int (*f)(char *s))
 {
 	int 	i;
 	char	free[len + 1];
-//	int		len_free;
 
-	if (stape < end)
+	if (stape < stape_end) // construction part (recusrtion)
 	{
-		recurs_set_char_free(org, tmp, free, stape, len);
+		recurs_set_char_free(org, tmp, free, stape, len);					// construction des case possible
 		i = 0;
-		while (i < len - stape)
+		while (i < len - stape)												// pour chaque cas possible
 		{
-			tmp[stape] = free[i];
-			test_combin_recurs(org, tmp, len, end, stape + 1, sum, f);
+			tmp[stape] = free[i];											// on place le charactere
+			test_combin_recurs(org, tmp, len, stape_end, stape + 1, sum, f);		// on lance la recurtion d'apres
 			i++;
 		}
 	}
-	else
+	else // printf part
 	{
-		(*sum)++;
+		(*sum)++;				// on incremente le nombre de mots construit
 		tmp[stape] = '\0';
 		ft_putstr("|");
-		f(tmp);
+		f(tmp);				// <-- on execute la fonciton d'impression 
 		ft_putstr("|");
 		ft_putstr("\n");
 	}
 }
 ////////////////////////////////////////////
 
+/*
+	Ici on prend une chaine de charactere et on fait toute les combinaison possible
+	entre ces caratere puis on les imprime.
+	-
+	On fera la meme chose avec un tableau de chaine de charactere
 
+	On construit chaque etape par recusrtion.
+	Il y a un buffer qui lui permet de construire les possibilite en fonction des charatere qui ne sont pas encore present.
+	Puis de les imprimer.
+	-
+	Pour le tableau de chaine de charactere il faudrait faire la meme chose avec des tableau d'indice de chaine de charactere
+
+*/
 
 void	test_recursion()
 {
@@ -290,8 +311,8 @@ void	test_recursion()
 	char	*str = " +-#0", s1[SMALL_BUFF], s2[SMALL_BUFF];
 	int		i, max, nb_flags;
 	////// cast ////////////
-	char	all_cast[10][SMALL_BUFF] = {"hh", "h", "", "l", "ll", "q", "j", "z", "t", "L"};
-	(void)all_cast;
+//	char	all_cast[10][SMALL_BUFF] = {"hh", "h", "", "l", "ll", "q", "j", "z", "t", "L"};
+//	(void)all_cast;
 
 
 	bzero(s1 ,sizeof(s1));
@@ -318,12 +339,74 @@ void	test_recursion()
 	type
 */
 
+void	wait_4_input_trace(char *file, int line)
+{
+	char	key;
+
+	printf("\nfile:%20s line:%d\t\t-- presse any key --\n", file, line);
+	read(0, &key, 1);
+}
+
+void	wait_4_input()
+{
+	char	key;
+
+	printf("\t\t-- presse any key --\n");
+	read(0, &key, 1);
+}
+
+void	buffer_description(t_buffer *b)
+{
+	
+	int		one_buf_size = sizeof(b->beg.data);
+	
+	printf("single buffer size:%d\n", one_buf_size);
+}
+
+void	test_buffer_function()
+{
+	t_buffer			b;
+	int					one_buf_size = sizeof(b.beg.data);
+	char				str1[] = " <<=\n";
+	char				str_nbr[BUFF_SMALL];
+	int					nbr_len;
+	int					str1_size;
+//	int					size;
+	int					i;
+	char				*tmp;
+	int					tmp_size;
+
+	(void)one_buf_size;(void)tmp;(void)tmp_size;
+	str1_size = sizeof(str1);
+//	printf("len(%s):%d\n", str1, str1_size);
+	buffer_init(&b);
+
+	i = 1;
+	while (i < (1 << 30))
+	{			
+		sprintf(str_nbr , "%d", (i - 1));
+		nbr_len = strlen(str_nbr);
+		buffer_push_nchar(&b, ' ', 12 - nbr_len);
+		buffer_push_data(&b, str_nbr, nbr_len);
+		buffer_push_data(&b, str1, strlen(str1));
+		i <<= 1;
+	}
+	buffer_output_standar(&b);
+//	buffer_output_standar(&b);
+//	tmp_size = (sizeof(b.beg.data) * b.block_nb + b.current->id + 1);
+//	tmp = (char*)malloc(tmp_size * sizeof(char));
+//	buffer_output_string(&b, tmp);
+//	buffer_output_string_size(&b, tmp, 115);
+//	printf("%s", tmp);
+}
+
 int	main(void)
 {
 //	test_print_float();
 //	test_print_float_precision();
-//	flag_test_general(-1.0);
-	
-	test_recursion();
+//	flag_test_general(-1.0);	
+//	test_recursion();
+
+	test_buffer_function();
 	return (0);
 }

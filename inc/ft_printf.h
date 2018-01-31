@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/17 04:45:31 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/01/31 22:59:35 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,35 @@
 # include "bistromatique.h"
 # include <math.h>
 
+
+# define BUFF_LARGE 4084 // (4096 - (sizeof(int) + sizeof(void*))) // pour que t_buf fasse lui 4096
+//# define BUFF_LARGE 3
+# define BUFF_SMALL 64
+
 //  integer //////////
 # define SYM_ASK 0
 # define SYM_MIN 1
 # define SYM_MAJ 2
 /////////////////////////
+
+
+// /////////////////////////////////////
+typedef	struct	s_buf
+{
+	char	data[BUFF_LARGE];
+	int		id;
+	struct	s_buf	*next;
+}				t_buf;
+
+typedef	struct	s_buffer
+{
+	t_buf	beg;
+	t_buf	*current;
+	int		block_nb;
+}				t_buffer;
+
+
+// /////////////////////////////////////
 
 // /////////////////////////////////////
 typedef	enum	e_type
@@ -228,6 +252,14 @@ void	print_bit_str(unsigned char *data, int size, char *s);
 */
 int		buffer(char *str, int size, int fd);	// si str est NULL on imprime le buffer et on libere la memoire
 
+void	buffer_init(t_buffer *b);
+void	buffer_push_data(t_buffer *b, char *data, int size);
+void	buffer_push_nchar(t_buffer *b, char c, int nb);
+void	buffer_output_fd(t_buffer *b, int fd);
+void	buffer_output_standar(t_buffer *b);
+void	buffer_output_string_size(t_buffer *b, char *dest, int len);
+void	buffer_output_string(t_buffer *b, char *dest);
+;
 /*
 **	floating_number.c
 */
