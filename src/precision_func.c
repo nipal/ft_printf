@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/06 07:35:16 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/12 08:37:25 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/09 09:14:54 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	*set_senario_star(char *now, t_fparam *p)
 		if (*now == '$')
 		{
 			p->state |= e_has_min_width_arg;
-			p->id_width = number;
+			p->width_id = number;
 			return (now + 1);
 		}
 	}
@@ -68,7 +68,7 @@ char	*set_senario_point(char *now, t_fparam *p)
 		{
 			if (*(now = get_number(now, &number)) == '$')
 			{
-				p->id_preci = number;
+				p->precision_id = number;
 				p->state |= e_has_precision_arg;
 				return (now + 1);
 			}
@@ -88,7 +88,7 @@ char	*set_senario_nbr(char *now, t_fparam *p)
 	if (*(now = get_number(now, &number)) == '$')
 	{
 		p->state |= e_has_value_arg;
-		p->id_width = number;
+		p->width_id = number;
 		return (now + 1);
 	}
 	p->state |= e_has_min_width;

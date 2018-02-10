@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/01/17 22:23:24 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/20 14:08:46 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/01 06:49:26 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,16 @@
 
 #define BUFF_SMALL	32
 #define BUFF_LARGE	1024
+
+////////////////////////////
+void	wait_4_input_trace(char *file, int line)
+{
+	char	key;
+
+	printf("\nfile:%20s line:%d\t\t-- presse any key --\n", file, line);
+	read(0, &key, 1);
+}
+////////////////////////////
 
 
 void	init_word_size(int *word_size, char *tab, int nb_word)
@@ -78,6 +88,50 @@ typedef	struct	s_pars
 	int					word_nb;
 	void				(*f)(char *beg_str, char *buff, t_list *beg_pars);
 }				t_pars;
+
+//============================= vv debug function vv =================================================
+
+void	print_line_limit(char limit, char mid, int l1, int l2)
+{
+	int	i;
+
+	printf("%c", limit);
+	for (i = 0; i < (l1); i++)
+		printf("%c", mid);
+	printf("%c", limit);
+	for (i = 0; i < (l2); i++)
+		printf("%c", mid);
+	printf("%c\n", limit);
+		
+}
+
+void	pars_node_describe(t_pars *p, int nb_pars)
+{
+	int		i;
+	int		j;
+	char	buff[BUFF_SMALL];
+
+	for (j = 0; j < nb_pars; j++)	
+	{
+		printf("\n\n             arg staked {%d}   \n", j);
+		print_line_limit('|', '-', 10, 32);
+		print_line_limit('|', '-', 10, 32);
+		printf("|%10s|%10lx%*.*d|\n", "mask ", p[j].mask, 22, 0, 0);
+		print_line_limit('|', '-', 10, 32);
+		print_line_limit('|', '-', 10, 32);
+		printf("|%10s|%10d%*.*d|\n", "word_nb ", p[j].word_nb, 22, 0, 0);
+		print_line_limit('|', '-', 10, 32);
+		print_line_limit('|', '-', 10, 32);
+		for (i = 0; i < p[j].word_nb; i++)
+		{
+			sprintf(buff, "word[%d]", i);
+			printf("|%10s|%32s|\n", buff, &(p[j].word_tab[i][0]));
+			print_line_limit('|', '-', 10, 32);
+		}
+		if (i)
+			print_line_limit('|', '-', 10, 32);
+	}
+}
 
 //============================= vv Recurtion vv ======================================================
 
@@ -274,11 +328,11 @@ void	func_nbr_precision(char *buff_beg, char *buff, t_list *elem)
 
 void	init_chain_param_all(t_pars *chain_input, int *chain_len)
 {
-
-		t_pars	chain[BUFF_SMALL] = {
+	int		i;
+	t_pars	chain[] = {
 		{0b00000000000000000000001, {"%"}          			                                                                                           , 1, f1_light},	// debut de la chaine
 		{0b00000000000000001111110, {"", " ", "+"}                                                                                                     , 3, f1_light},	// flag signe
-		{0b00000000000000001111110, {"", "-", "0","#"}                                                                                                 , 4, f2_light},	// flag autre
+		{0b00000000000000001111110, {"", "-", "0","#"}                                                                                                 , 4, f1_light},	// flag autre
 		{0b00000000000000000000001, {"", "hh", "h", "l", "ll", "L", "j", "q", "z"}                                                                     , 9, f1_light},	// taille
 		{0b00000000000000001111101, {"", "*"}                                                                                                          , 2, f1_light},
 		{0b00000000000000000000001, {"", "0", "1", "2", "3", "4", "15", "20", "30"}                                                                    , 12,f1_light},
@@ -289,7 +343,14 @@ void	init_chain_param_all(t_pars *chain_input, int *chain_len)
 		{0b00000000000000000000001, {"", "d", "i", "o", "u", "x", "X", "e", "E", "f", "F", "g", "G", "a", "A", "c", "C", "s", "S", "p", "n", "m", "%"} , 23,f1_light},
 		{0b00000000000000000000001, {""}                                                                                                               , 1, print_func}
 	};
+
 	*chain_len = sizeof(chain) / sizeof(t_pars);
+	printf("chain_len:%d	<= (%zu) / (%zu)\n", *chain_len, sizeof(chain), sizeof(t_pars));
+	memmove(chain_input + i, chain, sizeof(chain));
+	memmove(chain_input + i, chain, sizeof(chain));
+	pars_node_describe(chain, chain_len);
+
+
 }
 
 
@@ -346,8 +407,9 @@ void	init_chain_custom(t_pars *chain_input, int *chain_len)
 	//	combine all_len
 	//	all^(all)
 }                                                                                
-                                                                                 
-t_list	*creat_parsing_chain()                                                   
+
+//	
+t_list	*creat_parsing_chain(int *chain_len)                                                   
 {
 	int	i;
 	t_pars	p;
@@ -355,12 +417,11 @@ t_list	*creat_parsing_chain()
 //#define TRUC 1 // ==> '|'
 
 	t_pars	chain[BUFF_SMALL];
-	int		chain_len;
 
-	init_chain_param_all(chain, &chain_len);
+	init_chain_param_all(chain, chain_len);
 	beg = NULL;
 	i = 0;
-	while (i < chain_len)
+	while (i < *chain_len)
 	{
 		ft_lstadd_back(&beg, ft_lstnew(chain + i, sizeof(t_pars)));
 		i++;
@@ -380,16 +441,23 @@ void	pars_chain_del(void *content, size_t size)
 void	launch_production(t_list *beg)
 {
 	char	buff[BUFF_LARGE];
+	t_pars	*p;
 
-	((t_pars*)beg->content)->f(buff, buff, beg);
+//	((t_pars*)beg->content)->f(buff, buff, beg);
+	p = (t_pars*)beg->content;
+	p->f(buff, buff, beg);
 }
 
 void	unite_test_all()
 {
 	t_list	*beg;
+	int	chain_len;
+int	to_rm;	
 
-	if (!(beg = creat_parsing_chain()))
+to_rm = 0;
+	if (!(beg = creat_parsing_chain(&chain_len)))
 		return ;	
+//	pars_node_describe((t_pars*)beg->content, chain_len);
 	launch_production(beg);
 	ft_lstdel(&beg, pars_chain_del);
 }

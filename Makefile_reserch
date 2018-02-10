@@ -6,7 +6,7 @@
 #    By: nperrin <nperrin@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2015/01/05 01:28:32 by fjanoty           #+#    #+#              #
-#    Updated: 2018/02/09 12:56:28 by fjanoty          ###   ########.fr        #
+#    Updated: 2018/02/09 11:50:49 by fjanoty          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,51 +15,63 @@
 LIB1		=  ./libft
 
 SRC_PATH 	= src
-SRC_NAME 	= 							\
-				main_test.c				\
-				bistromatique.c			\
-				bistromatique_refacto.c	\
-				integer.c				\
-				type_function.c			\
-				print.c					\
-				print_bit.c				\
-				parsing.c				\
-				pars_func.c				\
-				precision_func.c		\
-				print_function.c		\
-				floating_number.c		\
-				variadic_argument.c		\
+SRC_NAME 	= 	main_test.c			\
+				bistromatique.c		\
+				integer.c			\
+				type_function.c		\
+				print.c				\
+				print_bit.c			\
+				parsing.c			\
+				pars_func.c			\
+				precision_func.c	\
+				print_function.c	\
+				floating_number.c	\
+				variadic_argument.c	\
 
 
 
 OBJ_PATH	= 	obj
 CPPFLAGS 	= 	-I inc -I $(LIB1)
 LDLIBS 		= 	-lft
-LDFLAGS 	= 	-L $(LIB1)  $(LDLIBS)
+LDFLAGS 	= 	-L $(LIB1)  $(LDLIBS) $(CPPFLAGS)
 NAME 		= 	ft_printf
 CC			= 	gcc
 
-CFLAGS		=	-Wall -Wextra -Werror
+CFLAGS		=	#-Wall -Wextra -Werror
 CFLAGS		+= 	-g3 -fsanitize=address
 #CFLAGS		+=	-02
 OBJ_NAME 	= 	$(SRC_NAME:.c=.o)
 
 SRC 		= 	$(addprefix $(SRC_PATH)/,$(SRC_NAME))
-#OBJ 		= 	$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
-OBJ			= 	$(SRC:.c=.o)
+#OBJ			: 	$(SRC:.c=.o)
+OBJ 		= 	$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
+#OBJ 		: 	$(addprefix $(OBJ_PATH)/,$(OBJ_NAME))
 	
-all: $(NAME)
+all: do_$(OBJ_PATH) $(NAME)
+	mv $(OBJ_NAME) $(OBJ_PATH) 
 
 LIB1:
 	make -C $(LIB1)
 
-$(NAME): $(OBJ)
+$(OBJ): 
+	@echo "			youpi <====iuiiui="
+	@echo "\n\n\t\t\t\t\t\t-----\n\n\n\n"
+	@echo "obj:" $(OBJ) "\t\t\t" "obj_path:" $(OBJ_PATH)
+	@echo "\n\n\t\t\t\t\t\t-----\n\n\n\n"
+	$(CC) $(CFLAGS) $(SRC) -c  $(LDFLAGS)
+
+$(NAME): $(OBJ_PATH)
+	echo "		 =====>	tralala"
 	    $(CC) $(CFLAGS) $(LDFLAGS) $(OBJ) -o $(NAME)
 
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
-	    @mkdir -p $(OBJ_PATH)
+	echo "		 =====>	  YOLO   <====="
 		$(CC) $(CFLAGS) $(CPPFLAGS) -o $@ -c $<
+		cp $(OBJ_NAME) $(OBJ_PATH)
+
+do_$(OBJ_PATH):
+	@mkdir -p $(OBJ_PATH)
 
 clean:
 	rm -rf $(OBJ)

@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/09 16:09:11 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/31 22:59:35 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/09 11:17:30 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,24 +184,24 @@ typedef	enum	e_stament
 // data to proces arg
 typedef	struct	s_fparam
 {
+	char	*beg_sec;		// debut
+	char	*prct;			// fin
 	long	state;			// la ou toute les option sont determiner
-	int		id_width;
-	int		id_preci;
-	int		id_arg;
 
-	//	set the prinsing param
-	int		width;			// l'entier qui corespond a la taille minimum, neg si addr
-	int		precision;		// l'entier qui corespond a la precision, neg si addr
-	t_type	arg;			// la valeur de l'argument a traiter et sont type
-	char	*beg_sec;
-	char	*prct;
-	int		base;			// on staque la base
+	int		width_id;
+	int		width;			// 
+	int		precision_id;
+	int		precision;		// 
+	int		arg_id;
+	t_type	arg;			// 
+
+//	int		base;			// 
 
 	// func to print the value
-	char	dash[5];		//	--> the thing 
-	char 	fill_before;	//	|	
-	char 	signe;			// 	| if 0 -> do nothing nothing
-	char	fill_after;		//	|
+//	char	dash[5];		//	--> le texet a metre en fonction de la base
+//	char 	fill_before;	//	|	
+//	char 	signe;			// 	| 
+//	char	fill_after;		//	|
 }				t_fparam;
 
 //typedef	struct	s_fparse

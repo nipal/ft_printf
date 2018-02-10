@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/17 00:15:47 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/04 02:07:03 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,13 +144,14 @@ void	main_parsing(const char *format, va_list beg)
 	static	char	*(*tabf[256])(char *now, t_fparam *p);
 	char		*cursor;
 	t_fparam		param_arg;
+	int				prct_cnt;
 	(void)tabf;(void)format;(void)beg;(void)current;
 
 //	va_copy(current, beg);
 	if (first)
 		init_func_table(tabf, &first);
+	prct_cnt = 0;
 	beg_param = NULL;
-
 	push_param(&beg_param, NULL);
 	param_arg.beg_sec = (char *)format;
 	param_arg.prct = get_char_toend((char*)format, '%');
@@ -161,7 +162,7 @@ void	main_parsing(const char *format, va_list beg)
 	while (*cursor)
 	{
 		cursor = tabf[*((unsigned char*)cursor)](cursor, &param_arg);
-		ft_lstadd(&beg_param, ft_lstnew(&param_arg, sizeof(t_fparam)));
+	//	ft_lstadd(&beg_param, ft_lstnew(&param_arg, sizeof(t_fparam)));
 	}
 	//	count the arg, get the arg
 	//		on scan les type [d'argument] et de [valeur] qui accedent aux arguemnt

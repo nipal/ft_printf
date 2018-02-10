@@ -6,47 +6,23 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/21 00:02:30 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/01/06 02:06:21 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/09 19:28:45 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "bistromatique.h"
+
 void	bistro_set_0_in(t_bistro *nb)
 {
 	bzero(nb, sizeof(t_bistro));
 }
 
-void	bistro_copie(t_bistro *from, t_bistro *to)
-{
-	int	i;
 
-	i = 0;
-	while (i < BISTRO_LEN)
-	{
-		to->number[i] = from->number[i];
-		i++;
-	}
-}
 
-void	bistro_add_in(t_bistro *a, t_bistro *b, t_bistro *result)
-{
-	int		i;
-	long	tmp;
-	long	ret;
-
-	i = 0;
-	ret = 0;
-	while (i < BISTRO_LEN)
-	{
-		tmp = a->number[i] + b->number[i] + ret;
-		ret = tmp / BISTRO_UNITE;
-		result->number[i] = tmp % BISTRO_UNITE;
-		i++;
-	}
-}
 
 void	bistro_mult_one_in(t_bistro *a, long nb, t_bistro *result)
 {
+	(void)a;(void)nb;(void)result;
 	int			i;
 	long		tmp;
 	long		ret;
@@ -70,6 +46,7 @@ void	bistro_mult_one_in(t_bistro *a, long nb, t_bistro *result)
 //	on decale tout les nombre, osef la perte d'info
 void	bistro_pow_unite_in(t_bistro *a, int pow, t_bistro *result)
 {
+	(void)a;(void)pow;(void)result;
 	int	i;
 
 	if (pow > 0)
@@ -104,6 +81,7 @@ void	bistro_pow_unite_in(t_bistro *a, int pow, t_bistro *result)
 
 void	bistro_mult_in(t_bistro *a, t_bistro *b, t_bistro *result)
 {
+	(void)a;(void)b;(void)result;
 	t_bistro	tmp;
 	t_bistro	tmp_sum;
 	int			i;
@@ -265,3 +243,268 @@ void	bistro_set_digit_in(long val, int pow, int base, t_bistro *nb)
 	mult = power(base, pow % BISTRO_NB_DIGIT);
 	nb->number[id_nb] = mult * val;
 }
+
+/*
+============================ ADD ============================
+arg1_is_a:
+	+, +
+	-, -
+	+, - && |a| >= |b|
+	-, + && |a| >= |b|
+--->  (a.sign * b.sign) > 0  || a > b
+
+func_is_add:
+	+, +
+	-, -
+--> (a.sign * b.sign) > 0
+sign_is_pos:
+	+, +
+	+, - && a >= b
+	-, + && !(a >= b)
+--> [!same_sign  && ((a > 0) ^ (b >= a))] || [a > 0 && b > 0]		(A & B || ~A & ~B) <=> (A ^ ~B)
+
+##	sign_is_neg:
+##		+, - && |b| > |a|
+##		-, + && |a| > |b|
+##		-, -
+##	--> [!same_sign  && {(a > 0) ^ (a > b)}] || [a < 0 && b < 0]
+
+
+============================ SUB ============================
+
+
+	+,+ && b > a	=  arg1_is_a && sign_eq
+	-,- && a > b
+
+
+arg1_is_a:
+	+,- 
+	-,+
+	+,+ && b > a
+	-,- && a > b
+--> (a.sign * b.sign) < 0 || ((a > 0) ^ (a > b))
+
+func_is_sub:
+	+,+
+	-,-
+sign_is_neg:
+	-,+
+	+,+	&& b > a
+	-,- && a > b
+--> (a < 0 && b > 0) || ((a.sign * b.sign) > 0 && ((a > 0) ^ (a > b)))
+
+
+	::::::::::::::::::::::::::::::::
+
+	 a +  b		=>	  a + b, +
+	 a + -b		=>	  a - b, +		si |a| >= |b|
+	 			 ou:  b - a, -		-- sinon --
+	-a +  b		=>	  b - a, -		si |a| >= |b|
+	 			 ou:  a - b, +		-- sinon --
+    -a + -b		=>	  a + b, -
+
+-----------
++,+	 a -  b		=>	  a - b, +		si |a| >= |b|
++,+	 			 ou:  b - a, -		-- sinon --
++,-	 a - -b		=>	  a + b, +
+-,+	-a -  b		=>	  a + b, -
+-,- -a - -b		=>	  b - a, +		si |b| >= |a|
+-,-	 			 ou:  a - b, -		-- sinon --
+
+		a + b |=> (a * b) > 0
+		a - b |=> a > b
+	::::::::::::::::::::::::::::::::
+	Il faudrait que les condition sur l'operation 
+		On a un premier changement en d'oeration en fonction du signe
+		Puis si c'est une soustraction et que l'un est plus grand que l'autre on inverse encore
+	::::::::::::::::::::::::::::::::
+
+
+	a - b => a + b*-1
+	bistro - scal
+	scal - bistro	=  (bistro * -1), + scal
+	|
+	|	Soit on gere la representation des nombre negatif dans les nombre et on
+	| a pas a gerer la soustraction en tant que tel:
+	|	a - b ==> a + b*-1
+	|	b - a ==> b + a*-1
+	|
+	|	Soit .
+*/
+
+
+/*
+	On part du principe que les valeur sont bonne,
+	si non on aurra envoyer des parametre pour tomber dans un cas facile
+*/
+void	bistro_sub_one_in(t_bistro *a, long nb, t_bistro *result)
+{
+	(void)a;(void)nb;(void)result;
+	//	normalement le nombre ne pourra attenindre que le trosieme block au maximum
+}
+
+//	7 -  3:	->	7 - 3
+//	7 -  9:	->	9 - 7, *-1
+//
+//	7 + -3:	->	7 - 3
+//	7 + -9:	->	9 - 7, *-1
+//
+
+/*
+	int		i;
+	long	tmp;
+	long	ret;
+	int		add;
+
+	i = 0;
+	ret = 0;
+	while (i < BISTRO_LEN)
+	{
+		tmp = a->number[i] - (b->number[i] + ret);
+		add = (((-tmp / BISTRO_UNITE) + 1) * BISTRO_UNIT);
+		ret = (tmp < 0) ? add : 0;
+		result->number[i] = (((tmp < 0) * add) + ) % BISTRO_UNITE;
+		i++;
+	}
+
+
+	tmp
+	
+		
+
+
+
+	--
+	tmp = -BISTRO_UNITE
+	result = 0
+	ret = 1
+	--
+	tmp = -3 * BISTRO_UNITE
+	result = tmp % BISTRO_UNITE * 
+	ret = 1
+	--
+	tmp = -(BISTRO_UNITE ^ 2)
+	ret = 
+*/
+
+/*
+	+, +	|	0
+	+, -	|	1
+	-, +	|	2
+	-, -	|	3
+*/
+
+/*
+	c1 = (a.sign * b.sign) >= 0		(same_sign)
+	c2 = (a > b)					(a_sup_b)
+	c3 = c1 && c2 ^ (a.sign >=0)	(result_positive)
+
+ 	(f = '-'):
+		+, +	0
+		-, -	3
+	-->  ((c1))
+
+	(arg1 = a):
+		+, +, a > b
+		+, -
+		-, +
+		-, -, a > b
+	-->  ( !c1 | ((c2 = (a > b))))
+
+ 	(inv = -1):
+		+, +, b > a
+		-, +
+		-, -, a > b
+	!(inv = -1)
+		+, +, a > b
+		-, -, b > a	|| -a > -b
+	-->	((a >= 0 && b >= 0) && ((a >= 0) ^ (a > b)), avec: sign = (a < 0) ? -1 : 1; pck a et b sont du mem signe
+	ou --> c1 && c2 ^ (a >=0)
+		
+
+	
+*/
+
+//	a >= b >= 0, 
+
+
+//	on pourrait rajouter le reste
+void	bistro_div_in(t_bistro *a, t_bistro *b, t_bistro *result)
+{
+	(void)a;(void)b;(void)result;
+	//	on evalue 
+}
+
+//	/////////////////////////////////////////////////////////
+
+
+int		bistro_is_inf_scal(t_bistro *a, long nb)
+{
+	(void)a;(void)nb;
+	return (0);
+}
+
+
+int		bistro_is_inf(t_bistro *a, t_bistro *b)
+{
+	(void)a;(void)b;
+	return (0);
+}
+
+
+int		bistro_is_inf_eq_scal(t_bistro *a, long nb)
+{
+	(void)a;(void)nb;
+	return (0);
+}
+
+
+int		bistro_is_inf_eq(t_bistro *a, t_bistro *b)
+{
+	(void)a;(void)b;
+	return (0);
+}
+
+
+int		bistro_is_sup_scal(t_bistro *a, long nb)
+{
+	(void)a;(void)nb;
+	return (0);
+}
+
+
+int		bistro_is_sup(t_bistro *a, t_bistro *b)
+{
+	(void)a;(void)b;
+	return (0);
+}
+
+
+int		bistro_is_sup_eq_scal(t_bistro *a, long nb)
+{
+	(void)a;(void)nb;
+	return (0);
+}
+
+
+int		bistro_is_sup_eq(t_bistro *a, t_bistro *b)
+{
+	(void)a;(void)b;
+	return (0);
+}
+
+
+int		bistro_is_eq_scal(t_bistro *a, long nb)
+{
+	(void)a;(void)nb;
+	return (0);
+}
+
+
+int		bistro_is_eq(t_bistro *a, t_bistro *b)
+{
+	(void)a;(void)b;
+	return (0);
+}
+
+
