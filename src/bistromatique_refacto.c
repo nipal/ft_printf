@@ -6,7 +6,7 @@
 /*   By: fjanoty <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/09 12:55:35 by fjanoty           #+#    #+#             */
-/*   Updated: 2018/02/09 22:20:02 by fjanoty          ###   ########.fr       */
+/*   Updated: 2018/02/12 16:12:02 by fjanoty          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	bistro_copie(t_bistro *from, t_bistro *to)
 	memmove(to->number, from->number, from->block_max * sizeof(from->number[0]));
 	to->block_max = from->block_max;
 	to->sign = from->sign;
-	to->cote = from->coma;
+	to->coma = from->coma;
 }
 
 void	bistro_add_minimal_in(t_bistro *a, t_bistro *b, t_bistro *result)
@@ -108,15 +108,16 @@ void	bistro_add_in(t_bistro *a, t_bistro *b, t_bistro *result)
 	t_bistro_sa		arg;
 	void			(*f)(t_bistro *a, t_bistro *b, t_bistro *result);
 
-	sign_eq = !((a.sign ^ b.sign) & (1l << ((sizeof(a.sign) * 8) - 1)));
+	sign_eq = !((a->sign ^ b->sign) & (1l << ((sizeof(a->sign) * 8) - 1)));
 	arg1_is_a = (sign_eq || bistro_is_sup(a, b));
-	sign_is_pos = (!sign_eq && ((a.sign > 0) ^ (bistro_is_sup_eq(b, a))))
-				|| (a.sign > 0 && b.sign > 0);
+	sign_is_pos = (!sign_eq && ((a->sign > 0) ^ (bistro_is_sup_eq(b, a))))
+				|| (a->sign > 0 && b->sign > 0);
+	func_is_add = sign_eq;
 
 	f = (func_is_add) ? bistro_add_minimal_in : bistro_sub_minimal_in;
 	arg = (arg1_is_a) ? (t_bistro_sa){a, b} : (t_bistro_sa){b, a};
 	f(arg.v1, arg.v2, result);
-	result.sign = (sign_is_pos) ? 1 : -1;
+	result->sign = (sign_is_pos) ? 1 : -1;
 }
 
 void	bistro_sub_in(t_bistro *a, t_bistro *b, t_bistro *result)
@@ -129,13 +130,14 @@ void	bistro_sub_in(t_bistro *a, t_bistro *b, t_bistro *result)
 	t_bistro_sa		arg;
 	void			(*f)(t_bistro *a, t_bistro *b, t_bistro *result);
 
-	tmp = ((a.sign > 0) ^ (bistro_is_sup(a, b)));
-	sign_eq = !((a.sign ^ b.sign) & (1l << ((sizeof(a.sign) * 8) - 1)));
+	tmp = ((a->sign > 0) ^ (bistro_is_sup(a, b)));
+	sign_eq = !((a->sign ^ b->sign) & (1l << ((sizeof(a->sign) * 8) - 1)));
 	arg1_is_a = !sign_eq || tmp;
-	sign_is_neg = ((a.sign < 0) && (b.sign > 0)) || tmp;
+	sign_is_neg = ((a->sign < 0) && (b->sign > 0)) || tmp;
+	func_is_sub = sign_eq;
 
 	f = (func_is_sub) ? bistro_sub_minimal_in : bistro_add_minimal_in;
 	arg = (arg1_is_a) ? (t_bistro_sa){a, b} : (t_bistro_sa){b, a};
 	f(arg.v1, arg.v2, result);
-	result.sign = (sign_is_neg) ? -1 : 1;
+	result->sign = (sign_is_neg) ? -1 : 1;
 }
